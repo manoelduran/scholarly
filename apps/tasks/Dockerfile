@@ -10,13 +10,13 @@ COPY nest-cli.json nest-cli.json
 
 RUN npm install -g pnpm
 
-COPY apps/auth apps/auth
+COPY apps/tasks apps/tasks
 COPY libs libs
 # install specific dependencies recursively
 RUN pnpm install -r
 
 #  build application
-RUN pnpm run build auth
+RUN pnpm run build tasks
 
 # Estágio de produção
 FROM node:23-alpine AS production
@@ -35,4 +35,5 @@ RUN pnpm install --prod
 #  copy dist folder from development to production ( it will ignore dev dependencies)
 COPY --from=development /usr/src/app/dist ./dist
 
-CMD ["node", "dist/apps/auth/main"]
+CMD ["node", "dist/apps/tasks/main"]
+
