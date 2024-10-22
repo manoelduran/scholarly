@@ -5,6 +5,8 @@ services:
       dockerfile: ./apps/auth/Dockerfile
       target: development
     command: pnpm run start:debug auth
+    depends_on:
+      - 'auth-mongo'
     env_file:
       - ./apps/auth/.env
     ports:
@@ -12,12 +14,35 @@ services:
       - '9229:9229'
     volumes:
       - .:/usr/src/app
-  mongo:
+  tasks:
+    build:
+      context: .
+      dockerfile: ./apps/tasks/Dockerfile
+      target: development
+    command: pnpm run start:debug tasks
+    depends_on:
+      - 'tasks-mongo'
+    env_file:
+      - ./apps/tasks/.env
+    ports:
+      - '3001:3001'
+    volumes:
+      - .:/usr/src/app
+  auth-mongo:
     image: mongo:latest
-    container_name: scholarly-mongo
+    container_name: scholarly-auth-mongo
     restart: 'unless-stopped'
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
     ports:
       - '27017:27017'
+  tasks-mongo:
+    image: mongo:latest
+    container_name: scholarly-tasks-mongo
+    restart: 'unless-stopped'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - '27018:27018'
