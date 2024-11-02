@@ -3,34 +3,31 @@ import { AbstractDocument } from '@app/common';
 
 @Schema({ versionKey: false })
 export class QuestionDocument extends AbstractDocument {
-  @Prop({ required: true })
+  @Prop()
   text: string;
 
-  @Prop({ required: true })
+  @Prop()
   type: string;
 
-  @Prop({ type: [String], required: false })
+  @Prop()
   options?: string[];
 
-  @Prop({ required: false })
+  @Prop()
   correctAnswer?: string;
 
-  @Prop({ required: true })
+  @Prop()
   taskId: string;
 
-  @Prop({ required: false, default: 1 })
+  @Prop()
   score?: number;
 
-  @Prop({ required: false })
+  @Prop()
   difficulty?: string;
 
-  @Prop({ type: [String], required: false })
+  @Prop()
   tags?: string[];
 
-  @Prop({ required: true, default: Date.now })
-  createdAt: Date;
-
-  @Prop({ required: true })
+  @Prop()
   teacherId: string;
 }
 

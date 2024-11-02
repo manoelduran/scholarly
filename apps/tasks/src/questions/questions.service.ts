@@ -8,16 +8,19 @@ export class QuestionsService {
   constructor(private readonly questionsRepository: QuestionsRepository) {}
 
   async create(createQuestionDto: CreateQuestionDto) {
+    console.log('createQuestionDto', createQuestionDto);
     await this.validateCreateQuestionDto(createQuestionDto);
-    return this.questionsRepository.create({
-      ...createQuestionDto,
-    });
+
+    return this.questionsRepository.create(createQuestionDto);
   }
   private async validateCreateQuestionDto(
     createQuestionDto: CreateQuestionDto,
   ) {
     try {
-      await this.questionsRepository.findOne({ text: createQuestionDto.text });
+      await this.questionsRepository.findOne({
+        text: createQuestionDto.text,
+        taskId: createQuestionDto.taskId,
+      });
     } catch (err) {
       return;
     }

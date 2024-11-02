@@ -23,6 +23,7 @@ import { UsersModule } from './users/users.module';
       isGlobal: true,
       validationSchema: Joi.object({
         MONGODB_URI: Joi.string().required(),
+        RABBITMQ_URI: Joi.string().required(),
         PORT: Joi.number().required(),
       }),
     }),
@@ -30,10 +31,11 @@ import { UsersModule } from './users/users.module';
       {
         name: TASKS_SERVICE,
         useFactory: (configService: ConfigService) => ({
-          transport: Transport.TCP,
+          Transport: Transport.RMQ,
           options: {
-            host: configService.get('AUTH_HOST'),
-            port: configService.get('AUTH_PORT'),
+            urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
+            noAck: false,
+            queue: 'tasks_queue',
           },
         }),
         inject: [ConfigService],
