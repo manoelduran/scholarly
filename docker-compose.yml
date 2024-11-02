@@ -45,4 +45,10 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
     ports:
-      - '27018:27018'
+      - '27018:27017'
+  rabbitmq:
+    image: rabbitmq
+    container_name: scholarly-rabitmq
+    restart: 'unless-stopped'
+    ports:
+      - '5672:5672'
