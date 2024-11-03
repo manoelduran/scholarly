@@ -20,13 +20,7 @@ export class TaskDocument extends AbstractDocument {
   totalScore?: number;
 
   @Prop({ required: false })
-  dueDate?: Date;
-
-  @Prop({ required: true, default: Date.now })
-  createdAt: Date;
-
-  @Prop({ required: true, default: Date.now })
-  updatedAt: Date;
+  dueDate?: string;
 
   @Prop({ required: true })
   teacherId: string;
