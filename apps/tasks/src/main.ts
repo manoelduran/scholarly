@@ -13,9 +13,6 @@ async function bootstrap() {
       urls: [configService.getOrThrow('RABBITMQ_URI')],
       noAck: false,
       queue: 'tasks_queue',
-      queueOptions: {
-        durable: false,
-      },
     },
   });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));

@@ -2,11 +2,13 @@ import { Module } from '@nestjs/common';
 import { TasksController } from './tasks.controller';
 import { TasksService } from './tasks.service';
 import * as Joi from 'joi';
-import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from '@app/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AUTH_SERVICE, DatabaseModule } from '@app/common';
 import { TaskDocument, TaskSchema } from './models/task.model';
 import { QuestionDocument, QuestionSchema } from './models/question.model';
 import { QuestionsModule } from './questions/questions.module';
+import { TasksRepository } from './tasks.repository';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -23,8 +25,21 @@ import { QuestionsModule } from './questions/questions.module';
         PORT: Joi.number().required(),
       }),
     }),
+    ClientsModule.registerAsync([
+      {
+        name: AUTH_SERVICE,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
+            queue: 'auth_queue',
+          },
+        }),
+        inject: [ConfigService],
+      },
+    ]),
   ],
   controllers: [TasksController],
-  providers: [TasksService],
+  providers: [TasksService, TasksRepository],
 })
 export class TasksModule {}
