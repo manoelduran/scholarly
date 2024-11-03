@@ -1,14 +1,23 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { MessagePattern } from '@nestjs/microservices';
+import { CreateTaskDto } from './dto/create-task.dto';
 
-@Controller()
+@Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
-
   @Get()
-  @MessagePattern('create_question')
-  getHello(): string {
-    return this.tasksService.getHello();
+  async list() {
+    return await this.tasksService.find();
+  }
+  @Get()
+  @UsePipes(new ValidationPipe())
+  create(@Body() data: CreateTaskDto) {
+    return this.tasksService.create(data);
   }
 }

@@ -8,9 +8,9 @@ import {
   UserDocument,
   UserSchema,
 } from '@app/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -31,11 +31,10 @@ import { UsersModule } from './users/users.module';
       {
         name: TASKS_SERVICE,
         useFactory: (configService: ConfigService) => ({
-          Transport: Transport.RMQ,
+          transport: Transport.RMQ,
           options: {
             urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
-            noAck: false,
-            queue: 'tasks_queue',
+            queue: 'task_queue',
           },
         }),
         inject: [ConfigService],
