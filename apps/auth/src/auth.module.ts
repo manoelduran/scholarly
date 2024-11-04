@@ -11,6 +11,7 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -24,8 +25,19 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       validationSchema: Joi.object({
         MONGODB_URI: Joi.string().required(),
         RABBITMQ_URI: Joi.string().required(),
+        JWT_SECRET: Joi.string().required(),
+        JWT_EXPIRATION: Joi.string().required(),
         PORT: Joi.number().required(),
       }),
+    }),
+    JwtModule.registerAsync({
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: {
+          expiresIn: `${configService.get('JWT_EXPIRATION')}s`,
+        },
+      }),
+      inject: [ConfigService],
     }),
     ClientsModule.registerAsync([
       {
