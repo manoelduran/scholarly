@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Post,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -15,7 +16,7 @@ export class TasksController {
   async list() {
     return await this.tasksService.find();
   }
-  @Get()
+  @Post()
   @UsePipes(new ValidationPipe())
   create(@Body() data: CreateTaskDto) {
     return this.tasksService.create(data);
