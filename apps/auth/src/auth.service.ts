@@ -12,7 +12,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
   async login(user: UserDocument, response: Response) {
-    const tokenPayload: TokenPayload = { userId: user._id.toHexString() };
+    const tokenPayload: TokenPayload = { userId: user._id };
     const expires = new Date();
     expires.setSeconds(
       expires.getSeconds() + this.configService.get('JWT_EXPIRATION'),
