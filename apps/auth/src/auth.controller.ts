@@ -35,8 +35,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @MessagePattern('create_task')
   @UsePipes(new ValidationPipe())
-  create(@Payload() data: CreateTaskDto, @Ctx() context: RmqContext) {
-    console.log('data', data);
+  async create(@Payload() data: CreateTaskDto, @Ctx() context: RmqContext) {
     const channel = context.getChannelRef();
     const originalMsg = context.getMessage();
     channel.ack(originalMsg);
