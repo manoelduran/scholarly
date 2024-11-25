@@ -1,15 +1,30 @@
 import { Module } from '@nestjs/common';
 import { QuestionsService } from './questions.service';
 import { QuestionsController } from './questions.controller';
-import { DatabaseModule } from '@app/common';
+import { AUTH_SERVICE, DatabaseModule } from '@app/common';
 import { QuestionDocument, QuestionSchema } from '../models/question.model';
 import { QuestionsRepository } from './questions.repository';
+import { ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
     DatabaseModule,
     DatabaseModule.forFeature([
       { name: QuestionDocument.name, schema: QuestionSchema },
+    ]),
+    ClientsModule.registerAsync([
+      {
+        name: AUTH_SERVICE,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
+            queue: 'auth_queue',
+          },
+        }),
+        inject: [ConfigService],
+      },
     ]),
   ],
   controllers: [QuestionsController],
