@@ -28,6 +28,20 @@ services:
       - '3001:3001'
     volumes:
       - .:/usr/src/app
+  task-processor:
+    build:
+      context: .
+      dockerfile: ./apps/task-processor/Dockerfile
+      target: development
+    command: pnpm run start:debug task-processor
+    depends_on:
+      - 'task-processor-mongo'
+    env_file:
+      - ./apps/task-processor/.env
+    ports:
+      - '3002:3002'
+    volumes:
+      - .:/usr/src/app
   auth-mongo:
     image: mongo:latest
     container_name: scholarly-auth-mongo
@@ -46,6 +60,15 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: root
     ports:
       - '27018:27017'
+  task-processor-mongo:
+    image: mongo:latest
+    container_name: scholarly-task-processor-mongo
+    restart: 'unless-stopped'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - '27019:27017'
   rabbitmq:
     image: rabbitmq
     container_name: scholarly-rabitmq
