@@ -17,8 +17,8 @@ export class UsersController {
   async listUsers() {
     return this.usersService.list();
   }
-  @Get()
   @UseGuards(JwtAuthGuard)
+  @Get()
   async getUser(@CurrentUser() user: UserDocument) {
     return user;
   }
