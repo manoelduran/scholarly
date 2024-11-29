@@ -3,7 +3,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { TasksRepository } from './tasks.repository';
 import { ClientProxy } from '@nestjs/microservices';
 import { AUTH_SERVICE } from '@app/common';
-import { map } from 'rxjs';
+// import { map } from 'rxjs';
 
 @Injectable()
 export class TasksService {
@@ -15,10 +15,12 @@ export class TasksService {
     return this.tasksRepository.find({});
   }
   async create(createTaskDto: CreateTaskDto) {
-    return this.authService.send('create_task', createTaskDto).pipe(
-      map(() => {
-        return this.tasksRepository.create(createTaskDto);
-      }),
-    );
+    return this.tasksRepository.create(createTaskDto);
+    // return this.authService.send('create_task', createTaskDto).pipe(
+    //   map((res) => {
+    //     console.log('res', res);
+    //     return this.tasksRepository.create(createTaskDto);
+    //   }),
+    // );
   }
 }

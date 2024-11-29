@@ -8,17 +8,18 @@ import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post('/')
+  @Post()
   async createUser(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
-  @Get('/')
+  
+  @Get()
   @UseGuards(JwtAuthGuard)
-  async getUsers() {
-    return this.usersService.getUsers();
+  async listUsers() {
+    return this.usersService.list();
   }
-  @Get('/me')
   @UseGuards(JwtAuthGuard)
+  @Get()
   async getUser(@CurrentUser() user: UserDocument) {
     return user;
   }

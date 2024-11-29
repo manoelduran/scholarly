@@ -1,20 +1,7 @@
-import {
-  Controller,
-  Post,
-  Res,
-  UseGuards,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Controller, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
-import {
-  Ctx,
-  MessagePattern,
-  Payload,
-  RmqContext,
-} from '@nestjs/microservices';
-import { CreateTaskDto } from 'apps/tasks/src/dto/create-task.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CurrentUser, UserDocument } from '@app/common';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -32,15 +19,16 @@ export class AuthController {
     const jwt = await this.authService.login(user, response);
     response.send(jwt);
   }
-  @UseGuards(JwtAuthGuard)
-  @MessagePattern('create_task')
-  @UsePipes(new ValidationPipe())
-  async create(@Payload() data: CreateTaskDto, @Ctx() context: RmqContext) {
-    const channel = context.getChannelRef();
-    const originalMsg = context.getMessage();
-    channel.ack(originalMsg);
-    return 'hello';
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @MessagePattern('create_task')
+  // @UsePipes(new ValidationPipe())
+  // create(@Payload() data: CreateTaskDto, @Ctx() context: RmqContext) {
+  //   console.log('data', data);
+  //   const channel = context.getChannelRef();
+  //   const originalMsg = context.getMessage();
+  //   channel.ack(originalMsg);
+  //   return 'hello';
+  // }
 
   @UseGuards(JwtAuthGuard)
   @MessagePattern('authenticate')
