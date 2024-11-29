@@ -12,6 +12,7 @@ export class UsersController {
   async createUser(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
+  
   @Get()
   @UseGuards(JwtAuthGuard)
   async listUsers() {
