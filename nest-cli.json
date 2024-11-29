@@ -34,6 +34,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/tasks/tsconfig.app.json"
       }
+    },
+    "task-processor": {
+      "type": "application",
+      "root": "apps/task-processor",
+      "entryFile": "main",
+      "sourceRoot": "apps/task-processor/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/task-processor/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
