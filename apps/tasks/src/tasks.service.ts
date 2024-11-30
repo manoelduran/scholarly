@@ -18,7 +18,7 @@ export class TasksService {
   async create(createTaskDto: CreateTaskDto) {
     return this.taskProcessorService.send('create_task', createTaskDto).pipe(
       map((res) => {
-        console.log('Response from task-processor', res.data);
+        console.log('Response from task-processor', res);
         return this.tasksRepository.create(createTaskDto);
       }),
     );
