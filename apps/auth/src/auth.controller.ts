@@ -19,16 +19,6 @@ export class AuthController {
     const jwt = await this.authService.login(user, response);
     response.send(jwt);
   }
-  // @UseGuards(JwtAuthGuard)
-  // @MessagePattern('create_task')
-  // @UsePipes(new ValidationPipe())
-  // create(@Payload() data: CreateTaskDto, @Ctx() context: RmqContext) {
-  //   console.log('data', data);
-  //   const channel = context.getChannelRef();
-  //   const originalMsg = context.getMessage();
-  //   channel.ack(originalMsg);
-  //   return 'hello';
-  // }
 
   @UseGuards(JwtAuthGuard)
   @MessagePattern('authenticate')

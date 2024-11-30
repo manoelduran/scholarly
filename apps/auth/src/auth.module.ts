@@ -4,13 +4,12 @@ import * as Joi from 'joi';
 import { AuthService } from './auth.service';
 import {
   DatabaseModule,
-  TASKS_SERVICE,
+  LoggerModule,
   UserDocument,
   UserSchema,
 } from '@app/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { JwtModule } from '@nestjs/jwt';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
@@ -19,6 +18,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
   imports: [
     DatabaseModule,
     UsersModule,
+    LoggerModule,
     DatabaseModule.forFeature([
       { name: UserDocument.name, schema: UserSchema },
     ]),
@@ -28,8 +28,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
         MONGODB_URI: Joi.string().required(),
         RABBITMQ_URI: Joi.string().required(),
         JWT_SECRET: Joi.string().required(),
-        JWT_EXPIRATION: Joi.string().required(),
         PORT: Joi.number().required(),
+        JWT_EXPIRATION: Joi.string().required(),
       }),
     }),
     JwtModule.registerAsync({
@@ -41,19 +41,6 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       }),
       inject: [ConfigService],
     }),
-    ClientsModule.registerAsync([
-      {
-        name: TASKS_SERVICE,
-        useFactory: (configService: ConfigService) => ({
-          transport: Transport.RMQ,
-          options: {
-            urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
-            queue: 'task_queue',
-          },
-        }),
-        inject: [ConfigService],
-      },
-    ]),
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],
