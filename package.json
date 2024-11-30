@@ -37,7 +37,9 @@
     "express": "^4.21.1",
     "joi": "^17.13.3",
     "mongoose": "^8.7.2",
+    "nestjs-pino": "^4.1.0",
     "passport-local": "^1.0.0",
+    "pino-pretty": "^13.0.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },
