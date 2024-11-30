@@ -13,7 +13,6 @@ export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async create(createUserDto: CreateUserDto) {
-    console.log('createUserDto', createUserDto);
     await this.validateCreateUserDto(createUserDto);
     return this.usersRepository.create({
       ...createUserDto,

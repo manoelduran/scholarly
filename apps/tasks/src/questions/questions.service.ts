@@ -8,7 +8,6 @@ export class QuestionsService {
   constructor(private readonly questionsRepository: QuestionsRepository) {}
 
   async create(createQuestionDto: CreateQuestionDto) {
-    console.log('createQuestionDto', createQuestionDto);
     await this.validateCreateQuestionDto(createQuestionDto);
 
     return this.questionsRepository.create(createQuestionDto);

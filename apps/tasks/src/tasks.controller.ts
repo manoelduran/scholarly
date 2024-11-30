@@ -25,7 +25,7 @@ export class TasksController {
   @Roles('admin')
   @Post()
   @UsePipes(new ValidationPipe())
-  create(@Body() data: CreateTaskDto) {
+  async create(@Body() data: CreateTaskDto) {
     return this.tasksService.create(data);
   }
 }
