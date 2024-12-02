@@ -12,6 +12,7 @@ import { ConfigModule } from '@nestjs/config';
       validationSchema: Joi.object({
         PORT: Joi.number().required(),
         RABBITMQ_URI: Joi.string().required(),
+        OLLAMA_HOST: Joi.string().required(),
       }),
     }),
     LoggerModule,
