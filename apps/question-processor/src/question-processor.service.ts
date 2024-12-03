@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { CreateTaskDto } from '@app/common';
 
 @Injectable()
-export class TaskProcessorService {
+export class QuestionProcessorService {
   private readonly ollama = new Ollama({
     host: this.configService.getOrThrow('OLLAMA_HOST'),
   });

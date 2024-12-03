@@ -9,13 +9,13 @@ COPY nest-cli.json nest-cli.json
 
 RUN npm install -g pnpm
 
-COPY apps/task-processor apps/task-processor
+COPY apps/question-processor apps/question-processor
 COPY libs libs
 # install specific dependencies recursively
 RUN pnpm install
 
 #  build application
-RUN pnpm run build task-processor
+RUN pnpm run build question-processor
 
 # production image
 FROM node:23-alpine AS production
@@ -34,5 +34,5 @@ RUN pnpm install --prod
 #  copy dist folder from development to production ( it will ignore dev dependencies)
 COPY --from=development /usr/src/app/dist ./dist
 
-CMD ["node", "dist/apps/task-processor/main"]
+CMD ["node", "dist/apps/question-processor/main"]
 
