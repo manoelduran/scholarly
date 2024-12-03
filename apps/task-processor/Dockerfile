@@ -12,7 +12,7 @@ RUN npm install -g pnpm
 COPY apps/task-processor apps/task-processor
 COPY libs libs
 # install specific dependencies recursively
-RUN pnpm install -r
+RUN pnpm install
 
 #  build application
 RUN pnpm run build task-processor
