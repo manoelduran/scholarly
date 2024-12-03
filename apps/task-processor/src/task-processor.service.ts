@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Ollama } from 'ollama';
-import { CreateTaskDto } from 'apps/tasks/src/dto/create-task.dto';
 import { ConfigService } from '@nestjs/config';
+import { CreateTaskDto } from '@app/common';
 
 @Injectable()
 export class TaskProcessorService {

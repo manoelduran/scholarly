@@ -6,7 +6,7 @@ import {
   Payload,
   RmqContext,
 } from '@nestjs/microservices';
-import { CreateTaskDto } from 'apps/tasks/src/dto/create-task.dto';
+import { CreateTaskDto } from '@app/common';
 
 @Controller()
 export class TaskProcessorController {
