@@ -28,14 +28,14 @@ services:
       - '3001:3001'
     volumes:
       - .:/usr/src/app
-  task-processor:
+  question-processor:
     build:
       context: .
-      dockerfile: ./apps/task-processor/Dockerfile
+      dockerfile: ./apps/question-processor/Dockerfile
       target: development
-    command: pnpm run start:debug task-processor
+    command: pnpm run start:debug question-processor
     env_file:
-      - ./apps/task-processor/.env
+      - ./apps/question-processor/.env
     ports:
       - '3002:3002'
     volumes:

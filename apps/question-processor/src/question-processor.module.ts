@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TaskProcessorController } from './task-processor.controller';
-import { TaskProcessorService } from './task-processor.service';
 import { LoggerModule, TASKS_SERVICE } from '@app/common';
 import * as Joi from 'joi';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { QuestionProcessorController } from './question-processor.controller';
+import { QuestionProcessorService } from './question-processor.service';
 
 @Module({
   imports: [
@@ -17,14 +17,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
     }),
     ClientsModule.registerAsync([
-
       {
         name: TASKS_SERVICE,
         useFactory: (configService: ConfigService) => ({
           transport: Transport.RMQ,
           options: {
             urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
-            queue: 'task_processor',
+            queue: 'question_processor',
           },
         }),
         inject: [ConfigService],
@@ -33,7 +32,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     LoggerModule,
   ],
 
-  controllers: [TaskProcessorController],
-  providers: [TaskProcessorService],
+  controllers: [QuestionProcessorController],
+  providers: [QuestionProcessorService],
 })
-export class TaskProcessorModule {}
+export class QuestionProcessorModule {}
