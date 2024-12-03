@@ -13,7 +13,7 @@ RUN npm install -g pnpm
 COPY apps/tasks apps/tasks
 COPY libs libs
 # install specific dependencies recursively
-RUN pnpm install -r
+RUN pnpm install
 
 #  build application
 RUN pnpm run build tasks
