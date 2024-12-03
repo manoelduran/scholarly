@@ -35,13 +35,13 @@
         "tsConfigPath": "apps/tasks/tsconfig.app.json"
       }
     },
-    "task-processor": {
+    "question-processor": {
       "type": "application",
-      "root": "apps/task-processor",
+      "root": "apps/question-processor",
       "entryFile": "main",
-      "sourceRoot": "apps/task-processor/src",
+      "sourceRoot": "apps/question-processor/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/task-processor/tsconfig.app.json"
+        "tsConfigPath": "apps/question-processor/tsconfig.app.json"
       }
     }
   },
