@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 import { IsString, IsNumber, IsBoolean, IsDate } from 'class-validator';
 import { QuestionDocument } from '@app/common';
+import { Type } from 'class-transformer';
 
 export class CreateTaskDto {
   @IsString()
@@ -14,6 +15,7 @@ export class CreateTaskDto {
   @IsNumber()
   totalScore?: number;
   @IsDate()
+  @Type(() => Date)
   dueDate?: Date;
   @IsString()
   creatorId: Types.ObjectId;
