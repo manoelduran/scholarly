@@ -1,7 +1,7 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
-import { CreateQuestionDto } from './dto/create-question.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';
 import { QuestionsRepository } from './questions.repository';
+import { CreateQuestionDto } from '@app/common';
 
 @Injectable()
 export class QuestionsService {
@@ -9,7 +9,7 @@ export class QuestionsService {
 
   async create(createQuestionDto: CreateQuestionDto) {
     await this.validateCreateQuestionDto(createQuestionDto);
-
+    console.log('Creating question:', createQuestionDto);
     return this.questionsRepository.create(createQuestionDto);
   }
   private async validateCreateQuestionDto(
@@ -17,8 +17,7 @@ export class QuestionsService {
   ) {
     try {
       await this.questionsRepository.findOne({
-        text: createQuestionDto.text,
-        taskId: createQuestionDto.taskId,
+        header: createQuestionDto.header,
       });
     } catch (err) {
       return;

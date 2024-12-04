@@ -1,8 +1,12 @@
 import { Module } from '@nestjs/common';
 import { QuestionsService } from './questions.service';
 import { QuestionsController } from './questions.controller';
-import { AUTH_SERVICE, DatabaseModule } from '@app/common';
-import { QuestionDocument, QuestionSchema } from '../models/question.model';
+import {
+  AUTH_SERVICE,
+  DatabaseModule,
+  QuestionDocument,
+  QuestionSchema,
+} from '@app/common';
 import { QuestionsRepository } from './questions.repository';
 import { ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
