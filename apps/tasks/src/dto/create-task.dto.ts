@@ -1,21 +1,22 @@
-import { QuestionDocument } from '../models/question.model';
-import { IsString, IsNumber, IsBoolean } from 'class-validator';
+import { Types } from 'mongoose';
+import { IsString, IsNumber, IsBoolean, IsDate } from 'class-validator';
+import { QuestionDocument } from '@app/common';
 
 export class CreateTaskDto {
   @IsString()
   title: string;
   @IsString()
-  description?: string;
+  instructions?: string;
   @IsString({ each: true })
   questions?: QuestionDocument[];
   @IsBoolean()
   isGraded: boolean;
   @IsNumber()
   totalScore?: number;
+  @IsDate()
+  dueDate?: Date;
   @IsString()
-  dueDate: string;
+  creatorId: Types.ObjectId;
   @IsString()
-  teacherId: string;
-  @IsString()
-  studentId: string;
+  studentId: Types.ObjectId;
 }

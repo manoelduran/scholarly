@@ -9,9 +9,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { QuestionsService } from './questions.service';
-import { CreateQuestionDto } from './dto/create-question.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';
-import { CurrentUser, JwtAuthGuard, UserDocument } from '@app/common';
+import {
+  CreateQuestionDto,
+  CurrentUser,
+  JwtAuthGuard,
+  UserDocument,
+} from '@app/common';
 
 @Controller('questions')
 export class QuestionsController {
@@ -22,11 +26,13 @@ export class QuestionsController {
     @Body() createQuestionDto: CreateQuestionDto,
     @CurrentUser() user: UserDocument,
   ) {
+    console.log(user);
     return this.questionsService.create(createQuestionDto);
   }
   @UseGuards(JwtAuthGuard)
   @Get()
   async findAll() {
+    console.log('hello');
     return this.questionsService.findAll();
   }
   @UseGuards(JwtAuthGuard)

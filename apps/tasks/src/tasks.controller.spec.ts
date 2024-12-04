@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TasksController } from './tasks.controller';
 import { TasksService } from './tasks.service';
+import { CreateTaskDto } from '@app/common';
 
 describe('TasksController', () => {
   let tasksController: TasksController;
@@ -16,7 +17,9 @@ describe('TasksController', () => {
 
   describe('root', () => {
     it('should return "Hello World!"', () => {
-      expect(tasksController.getHello()).toBe('Hello World!');
+      const data = {} as CreateTaskDto;
+
+      expect(tasksController.create(data)).toBe('Hello World!');
     });
   });
 });
