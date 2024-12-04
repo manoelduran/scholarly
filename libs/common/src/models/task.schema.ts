@@ -17,9 +17,8 @@ export class TaskDocument extends AbstractDocument {
   isGraded: boolean;
 
   @Prop({
-    required: function () {
-      return this.isGraded;
-    },
+    required: false,
+    type: Number,
   })
   totalScore?: number;
 
