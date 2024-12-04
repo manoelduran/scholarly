@@ -8,8 +8,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { JwtAuthGuard, Roles } from '@app/common';
+import { CreateTaskDto, JwtAuthGuard, Roles } from '@app/common';
 
 @Controller('tasks')
 export class TasksController {

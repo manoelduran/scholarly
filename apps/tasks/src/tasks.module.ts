@@ -7,13 +7,18 @@ import {
   AUTH_SERVICE,
   DatabaseModule,
   LoggerModule,
+  QuestionDocument,
+  QuestionSchema,
   TASK_PROCESSOR_SERVICE,
+  TaskDocument,
+  TaskSchema,
 } from '@app/common';
-import { TaskDocument, TaskSchema } from './models/task.model';
-import { QuestionDocument, QuestionSchema } from './models/question.model';
 import { QuestionsModule } from './questions/questions.module';
 import { TasksRepository } from './tasks.repository';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { QuestionsController } from './questions/questions.controller';
+import { QuestionsService } from './questions/questions.service';
+import { QuestionsRepository } from './questions/questions.repository';
 
 @Module({
   imports: [
@@ -57,7 +62,12 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       },
     ]),
   ],
-  controllers: [TasksController],
-  providers: [TasksService, TasksRepository],
+  controllers: [TasksController, QuestionsController],
+  providers: [
+    TasksService,
+    TasksRepository,
+    QuestionsService,
+    QuestionsRepository,
+  ],
 })
 export class TasksModule {}

@@ -1,13 +1,12 @@
 import { Controller } from '@nestjs/common';
-
 import {
   Ctx,
   MessagePattern,
   Payload,
   RmqContext,
 } from '@nestjs/microservices';
-import { CreateTaskDto } from '@app/common';
 import { QuestionProcessorService } from './question-processor.service';
+import { CreateQuestionDto } from '@app/common';
 
 @Controller()
 export class QuestionProcessorController {
@@ -16,8 +15,8 @@ export class QuestionProcessorController {
   ) {}
 
   @MessagePattern('create_task')
-  create(@Payload() data: CreateTaskDto, @Ctx() context: RmqContext) {
+  create(@Payload() data: CreateQuestionDto, @Ctx() context: RmqContext) {
     console.log('Received task:', data, context);
-    return this.questionProcessorService.generateTask(data);
+    return this.questionProcessorService.generate(data);
   }
 }
