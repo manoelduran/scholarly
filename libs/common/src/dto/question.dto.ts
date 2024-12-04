@@ -14,10 +14,10 @@ export enum DifficultyLevel {
 export interface QuestionDto {
   _id?: Types.ObjectId;
   header: string;
-  type: string;
+  type: QuestionType;
   options: string[];
   correctAnswer: string;
-  difficulty: string;
+  difficulty: DifficultyLevel;
   tags: string[];
   creatorId: Types.ObjectId;
 }

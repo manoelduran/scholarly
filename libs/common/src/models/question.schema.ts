@@ -12,25 +12,11 @@ export class QuestionDocument extends AbstractDocument {
 
   @Prop({
     type: [String],
-    required: function (this: QuestionDocument) {
-      return this.type === QuestionType.Subject;
-    },
   })
   options: string[];
 
   @Prop({
     type: String,
-    required: function (this: QuestionDocument) {
-      return this.type === QuestionType.Subject;
-    },
-    validate: {
-      validator: function (this: QuestionDocument, value: string) {
-        return (
-          this.type !== QuestionType.Subject || this.options?.includes(value)
-        );
-      },
-      message: 'Correct answer must be one of the options.',
-    },
   })
   correctAnswer: string;
 
@@ -38,7 +24,7 @@ export class QuestionDocument extends AbstractDocument {
   difficulty: string;
 
   @Prop({ required: false, type: [String] })
-  tags: string[];
+  tags?: string[];
 
   @Prop({ required: true, type: Types.ObjectId, ref: 'Teacher' })
   creatorId: Types.ObjectId;

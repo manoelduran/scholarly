@@ -9,14 +9,16 @@ export class CreateQuestionDto {
   @IsEnum(QuestionType)
   type: QuestionType;
 
+  @IsArray()
   options: string[];
 
+  @IsString()
   correctAnswer: string;
 
   @IsEnum(DifficultyLevel)
   difficulty: DifficultyLevel;
 
-  @IsArray({ each: true })
+  @IsString({ each: true })
   tags: string[];
 
   @IsString()

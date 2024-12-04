@@ -26,13 +26,13 @@ export class QuestionsController {
     @Body() createQuestionDto: CreateQuestionDto,
     @CurrentUser() user: UserDocument,
   ) {
+    console.log('Request Payload:', createQuestionDto);
     console.log(user);
     return this.questionsService.create(createQuestionDto);
   }
   @UseGuards(JwtAuthGuard)
   @Get()
   async findAll() {
-    console.log('hello');
     return this.questionsService.findAll();
   }
   @UseGuards(JwtAuthGuard)

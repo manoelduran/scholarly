@@ -9,7 +9,7 @@ export class QuestionsService {
 
   async create(createQuestionDto: CreateQuestionDto) {
     await this.validateCreateQuestionDto(createQuestionDto);
-
+    console.log('Creating question:', createQuestionDto);
     return this.questionsRepository.create(createQuestionDto);
   }
   private async validateCreateQuestionDto(
