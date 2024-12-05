@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
+  ValidationPipe,
+  UsePipes,
 } from '@nestjs/common';
 import { QuestionsService } from './questions.service';
 import { UpdateQuestionDto } from './dto/update-question.dto';
@@ -22,6 +24,7 @@ export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
   @UseGuards(JwtAuthGuard)
   @Post()
+  @UsePipes(new ValidationPipe())
   async create(
     @Body() createQuestionDto: CreateQuestionDto,
     @CurrentUser() user: UserDocument,

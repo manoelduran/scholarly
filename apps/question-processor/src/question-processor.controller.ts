@@ -14,9 +14,9 @@ export class QuestionProcessorController {
     private readonly questionProcessorService: QuestionProcessorService,
   ) {}
 
-  @MessagePattern('create_task')
+  @MessagePattern('create_question')
   create(@Payload() data: CreateQuestionDto, @Ctx() context: RmqContext) {
-    console.log('Received task:', data, context);
+    console.log('Received question:', data, context);
     return this.questionProcessorService.generate(data);
   }
 }
