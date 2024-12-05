@@ -1,16 +1,33 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { UpdateQuestionDto } from './dto/update-question.dto';
 import { QuestionsRepository } from './questions.repository';
-import { CreateQuestionDto } from '@app/common';
+import { CreateQuestionDto, QUESTION_PROCESSOR_SERVICE } from '@app/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { map } from 'rxjs';
 
 @Injectable()
 export class QuestionsService {
-  constructor(private readonly questionsRepository: QuestionsRepository) {}
+  constructor(
+    private readonly questionsRepository: QuestionsRepository,
+    @Inject(QUESTION_PROCESSOR_SERVICE)
+    private readonly questionProcessorService: ClientProxy,
+  ) {}
 
   async create(createQuestionDto: CreateQuestionDto) {
     await this.validateCreateQuestionDto(createQuestionDto);
     console.log('Creating question:', createQuestionDto);
-    return this.questionsRepository.create(createQuestionDto);
+    return await this.questionProcessorService
+      .send('create_question', createQuestionDto)
+      .pipe(
+        map((res) => {
+          console.log('Response from question-processor', res);
+          return this.questionsRepository.create(createQuestionDto);
+        }),
+      );
   }
   private async validateCreateQuestionDto(
     createQuestionDto: CreateQuestionDto,

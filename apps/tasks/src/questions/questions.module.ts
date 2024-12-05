@@ -4,6 +4,7 @@ import { QuestionsController } from './questions.controller';
 import {
   AUTH_SERVICE,
   DatabaseModule,
+  QUESTION_PROCESSOR_SERVICE,
   QuestionDocument,
   QuestionSchema,
 } from '@app/common';
@@ -24,7 +25,18 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
           transport: Transport.RMQ,
           options: {
             urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
-            queue: 'auth_queue',
+            queue: 'auth',
+          },
+        }),
+        inject: [ConfigService],
+      },
+      {
+        name: QUESTION_PROCESSOR_SERVICE,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
+            queue: 'question_processor',
           },
         }),
         inject: [ConfigService],

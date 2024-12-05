@@ -7,9 +7,9 @@ import {
   AUTH_SERVICE,
   DatabaseModule,
   LoggerModule,
+  QUESTION_PROCESSOR_SERVICE,
   QuestionDocument,
   QuestionSchema,
-  TASK_PROCESSOR_SERVICE,
   TaskDocument,
   TaskSchema,
 } from '@app/common';
@@ -50,12 +50,12 @@ import { QuestionsRepository } from './questions/questions.repository';
         inject: [ConfigService],
       },
       {
-        name: TASK_PROCESSOR_SERVICE,
+        name: QUESTION_PROCESSOR_SERVICE,
         useFactory: (configService: ConfigService) => ({
           transport: Transport.RMQ,
           options: {
             urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
-            queue: 'task_processor',
+            queue: 'question_processor',
           },
         }),
         inject: [ConfigService],
