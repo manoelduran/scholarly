@@ -1,4 +1,4 @@
-import { IsString, IsEnum, IsArray } from 'class-validator';
+import { IsString, IsEnum } from 'class-validator';
 import { Types } from 'mongoose';
 import { DifficultyLevel, QuestionType } from './question.dto';
 
@@ -8,12 +8,6 @@ export class CreateQuestionDto {
 
   @IsEnum(QuestionType)
   type: QuestionType;
-
-  @IsArray()
-  options: string[];
-
-  @IsString()
-  correctAnswer: string;
 
   @IsEnum(DifficultyLevel)
   difficulty: DifficultyLevel;
