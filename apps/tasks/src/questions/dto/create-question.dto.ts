@@ -5,10 +5,6 @@ export class CreateQuestionDto {
   text: string;
   @IsString()
   type: string;
-  @IsString({ each: true })
-  options?: string[];
-  @IsString()
-  correctAnswer?: string;
   @IsString()
   taskId: string;
   @IsNumber()

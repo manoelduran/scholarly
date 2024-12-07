@@ -13,7 +13,7 @@ export class QuestionDocument extends AbstractDocument {
   @Prop({
     type: [String],
   })
-  options: string[];
+  options?: string[];
 
   @Prop({
     type: String,
