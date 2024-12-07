@@ -20,12 +20,22 @@ export class QuestionsService {
   async create(createQuestionDto: CreateQuestionDto) {
     await this.validateCreateQuestionDto(createQuestionDto);
     console.log('Creating question:', createQuestionDto);
-    return await this.questionProcessorService
+    return this.questionProcessorService
       .send('create_question', createQuestionDto)
       .pipe(
         map((res) => {
-          console.log('Response from question-processor', res);
-          return this.questionsRepository.create(createQuestionDto);
+          for (const question of res) {
+            this.questionsRepository.create({
+              header: question.question,
+              type: createQuestionDto.type,
+              options: question.options,
+              correctAnswer: question.correctAnswer,
+              difficulty: createQuestionDto.difficulty,
+              tags: createQuestionDto.tags,
+              creatorId: createQuestionDto.creatorId,
+            });
+          }
+          // return 'Questions created successfully';
         }),
       );
   }
