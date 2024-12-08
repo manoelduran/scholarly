@@ -12,7 +12,6 @@ export class QuestionProcessorService {
   constructor(private readonly configService: ConfigService) {}
   async generate(data: CreateQuestionDto) {
     try {
-      console.log('Processing question:', data);
       const prompt = `
       Generate 7 questions with this type: ${data.type} and this difficulty level: ${data.difficulty} about this topic: ${data.header}:
 
@@ -33,21 +32,16 @@ export class QuestionProcessorService {
 
       const content = response.message.content;
 
-      // Extrair apenas o array dentro de `content`
+      // Extract the array of questions from the response
       const arrayMatch = content.match(/\[(\s*{[^]*}\s*)\]/);
 
       if (!arrayMatch) {
         throw new Error('Array not found in content');
       }
 
-      const arrayString = arrayMatch[0]; // Obtém a string correspondente ao array
-
-      // Converter a string do array em um objeto JSON
+      const arrayString = arrayMatch[0];
       const questions = JSON.parse(arrayString);
       console.log('Generated questions:', questions);
-      // Here I receive a big string with the generated questions.
-      // I need to parse it and return the questions as an array of objects.
-      // After I will return the array.
       return questions;
     } catch (error) {
       console.error('Error interacting with Ollama API:', error);
