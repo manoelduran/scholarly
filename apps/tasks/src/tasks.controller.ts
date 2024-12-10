@@ -8,7 +8,13 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { CreateTaskDto, JwtAuthGuard, Roles } from '@app/common';
+import {
+  CreateTaskDto,
+  CurrentUser,
+  JwtAuthGuard,
+  Roles,
+  UserDocument,
+} from '@app/common';
 
 @Controller('tasks')
 export class TasksController {
@@ -24,7 +30,8 @@ export class TasksController {
   @Roles('admin')
   @Post()
   @UsePipes(new ValidationPipe())
-  async create(@Body() data: CreateTaskDto) {
-    return this.tasksService.create(data);
+  async create(@Body() data: CreateTaskDto, @CurrentUser() user: UserDocument) {
+    console.log('user', user);
+    return this.tasksService.create(data, user._id);
   }
 }

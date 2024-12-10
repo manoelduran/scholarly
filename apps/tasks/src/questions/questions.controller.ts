@@ -30,7 +30,7 @@ export class QuestionsController {
     @CurrentUser() user: UserDocument,
   ) {
     console.log(user);
-    return this.questionsService.create(createQuestionDto);
+    return this.questionsService.create(createQuestionDto, user._id);
   }
   @UseGuards(JwtAuthGuard)
   @Get()
