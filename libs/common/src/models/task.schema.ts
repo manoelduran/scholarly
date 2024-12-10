@@ -27,9 +27,6 @@ export class TaskDocument extends AbstractDocument {
 
   @Prop({ required: true, type: Types.ObjectId, ref: 'Teacher' })
   creatorId: Types.ObjectId;
-
-  @Prop({ required: true, type: Types.ObjectId, ref: 'Student' })
-  studentId: Types.ObjectId;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(TaskDocument);

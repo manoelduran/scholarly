@@ -26,6 +26,7 @@ export class QuestionsService {
           for (const question of res) {
             this.questionsRepository.create({
               header: question.question,
+              classGroup: createQuestionDto.header,
               type: createQuestionDto.type,
               options: question.options,
               correctAnswer: question.correctAnswer,

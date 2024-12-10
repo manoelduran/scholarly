@@ -16,6 +16,7 @@ export interface QuestionDto {
   header: string;
   type: QuestionType;
   options: string[];
+  classGroup: string;
   correctAnswer: string;
   difficulty: DifficultyLevel;
   tags: string[];
