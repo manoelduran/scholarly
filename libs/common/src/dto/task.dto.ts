@@ -1,5 +1,4 @@
 import { Types } from 'mongoose';
-import { QuestionDocument } from '../models';
 
 export interface TaskDto {
   _id?: Types.ObjectId;
@@ -8,7 +7,7 @@ export interface TaskDto {
 
   instructions?: string;
 
-  questions?: QuestionDocument[];
+  questions?: Types.ObjectId[];
 
   isGraded: boolean;
 
@@ -17,6 +16,4 @@ export interface TaskDto {
   dueDate?: Date;
 
   creatorId: Types.ObjectId;
-
-  studentId: Types.ObjectId;
 }

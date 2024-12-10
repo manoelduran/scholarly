@@ -18,6 +18,10 @@ export class QuestionDocument extends AbstractDocument {
   @Prop({
     type: String,
   })
+  classGroup: string;
+  @Prop({
+    type: String,
+  })
   correctAnswer: string;
 
   @Prop({ required: true, enum: DifficultyLevel })
