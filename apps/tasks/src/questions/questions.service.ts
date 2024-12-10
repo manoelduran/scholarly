@@ -8,6 +8,7 @@ import { QuestionsRepository } from './questions.repository';
 import { CreateQuestionDto, QUESTION_PROCESSOR_SERVICE } from '@app/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { map } from 'rxjs';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class QuestionsService {
@@ -17,7 +18,10 @@ export class QuestionsService {
     private readonly questionProcessorService: ClientProxy,
   ) {}
 
-  async create(createQuestionDto: CreateQuestionDto) {
+  async create(
+    createQuestionDto: CreateQuestionDto,
+    creatorId: Types.ObjectId,
+  ) {
     await this.validateCreateQuestionDto(createQuestionDto);
     return this.questionProcessorService
       .send('create_question', createQuestionDto)
@@ -32,7 +36,7 @@ export class QuestionsService {
               correctAnswer: question.correctAnswer,
               difficulty: createQuestionDto.difficulty,
               tags: createQuestionDto.tags,
-              creatorId: createQuestionDto.creatorId,
+              creatorId: creatorId,
             });
           }
           // return 'Questions created successfully';

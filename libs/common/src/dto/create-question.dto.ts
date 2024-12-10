@@ -1,5 +1,4 @@
 import { IsString, IsEnum } from 'class-validator';
-import { Types } from 'mongoose';
 import { DifficultyLevel, QuestionType } from './question.dto';
 
 export class CreateQuestionDto {
@@ -14,7 +13,4 @@ export class CreateQuestionDto {
 
   @IsString({ each: true })
   tags: string[];
-
-  @IsString()
-  creatorId: Types.ObjectId;
 }
