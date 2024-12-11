@@ -16,12 +16,6 @@ export class TaskDocument extends AbstractDocument {
   @Prop({ required: true, default: false, type: Boolean })
   isGraded: boolean;
 
-  @Prop({
-    required: false,
-    type: Number,
-  })
-  totalScore?: number;
-
   @Prop({ required: false, type: Date })
   dueDate?: Date;
 
