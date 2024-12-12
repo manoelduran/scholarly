@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Ollama } from 'ollama';
 import { ConfigService } from '@nestjs/config';
-import { AnswerTaskDto, CreateQuestionDto } from '@app/common';
+import { Answer, CreateQuestionDto } from '@app/common';
 
 @Injectable()
 export class QuestionProcessorService {
@@ -48,33 +48,34 @@ export class QuestionProcessorService {
       throw new Error('Failed to generate task');
     }
   }
-  async correct(data: AnswerTaskDto) {
+  async correct(
+    data: Record<string, { correctAnswer: string; answer: Answer }>,
+  ) {
     try {
-      //   const prompt = `
-      //   Generate 7 questions with this type: ${data.answers[0].answer} and this difficulty level: ${data.difficulty} about this topic: ${data.header}:
-
-      //   Format the response as an array of objects with the following structure:
-      //   [
-      //     {
-      //       "question": "string",
-      //       "options": ["string", "string", "string", "string"],
-      //       "correctAnswer": "string"
-      //     },
-      //     ...
-      //   ]
-      // `;
+      console.log('data:', data);
+      const questionComparisons = Object.entries(data)
+        .map(
+          ([questionId, { correctAnswer, answer }]) =>
+            `Question ID: ${questionId}\nCorrect Answer: ${correctAnswer}\nUser Answer: ${answer.answer}`,
+        )
+        .join('\n\n');
+      const prompt = `
+        Compare each question's correct answer with the user's answer and return the result of the comparison for each question:
+        
+        ${questionComparisons}
+      `;
       const response = await this.ollama.chat({
         model: 'llama3.2',
-        messages: [{ role: 'user', content: data.answers[0].answer }],
+        messages: [{ role: 'user', content: prompt }],
       });
 
       const content = response.message.content;
 
       console.log('content:', content);
-      // return questions;
+      return content;
     } catch (error) {
       console.error('Error interacting with Ollama API:', error);
-      throw new Error('Failed to generate task');
+      throw new Error('Failed to correct task');
     }
   }
 }

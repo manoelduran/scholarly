@@ -6,7 +6,7 @@ import {
   RmqContext,
 } from '@nestjs/microservices';
 import { QuestionProcessorService } from './question-processor.service';
-import { CreateQuestionDto, AnswerTaskDto } from '@app/common';
+import { CreateQuestionDto, Answer } from '@app/common';
 
 @Controller()
 export class QuestionProcessorController {
@@ -20,7 +20,10 @@ export class QuestionProcessorController {
     return this.questionProcessorService.generate(data);
   }
   @MessagePattern('answered_task')
-  correct(@Payload() data: AnswerTaskDto, @Ctx() context: RmqContext) {
+  correct(
+    @Payload() data: Record<string, { correctAnswer: string; answer: Answer }>,
+    @Ctx() context: RmqContext,
+  ) {
     console.log('answered_task', data, context);
     return this.questionProcessorService.correct(data);
   }

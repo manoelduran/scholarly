@@ -13,6 +13,7 @@ import {
   AnswerTaskDto,
   CurrentUser,
   JwtAuthGuard,
+  Roles,
   UserDocument,
 } from '@app/common';
 import { StudentAnswerService } from './answers.service';
@@ -23,6 +24,7 @@ export class StudentAnswerController {
   constructor(private readonly studentAnswerService: StudentAnswerService) {}
   @UseGuards(JwtAuthGuard)
   @Post(':taskId')
+  @Roles('student')
   @UsePipes(new ValidationPipe())
   async create(
     @Param('taskId') taskId: Types.ObjectId,
