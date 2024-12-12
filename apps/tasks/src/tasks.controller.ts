@@ -31,7 +31,6 @@ export class TasksController {
   @Post()
   @UsePipes(new ValidationPipe())
   async create(@Body() data: CreateTaskDto, @CurrentUser() user: UserDocument) {
-    console.log('user', user);
     return this.tasksService.create(data, user._id);
   }
 }
