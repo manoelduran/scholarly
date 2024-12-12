@@ -8,9 +8,9 @@ import {
 } from '@app/common';
 import { ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { QuestionsController } from '../questions/questions.controller';
 import { StudentAnswerService } from './answers.service';
 import { StudentAnswersRepository } from './answers.repository';
+import { StudentAnswerController } from './answers.controller';
 
 @Module({
   imports: [
@@ -43,7 +43,7 @@ import { StudentAnswersRepository } from './answers.repository';
       },
     ]),
   ],
-  controllers: [QuestionsController],
+  controllers: [StudentAnswerController],
   providers: [StudentAnswerService, StudentAnswersRepository],
 })
 export class QuestionsModule {}

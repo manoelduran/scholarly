@@ -1,11 +1,7 @@
-import { IsObject, IsString } from 'class-validator';
-import { Types } from 'mongoose';
+import { IsObject } from 'class-validator';
 import { Answer } from './student-answer.dto';
 
 export class AnswerTaskDto {
-  @IsString()
-  taskId: Types.ObjectId;
-
   @IsObject({ each: true })
   answers: Answer[];
 }

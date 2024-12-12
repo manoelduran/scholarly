@@ -16,19 +16,21 @@ import {
   UserDocument,
 } from '@app/common';
 import { StudentAnswerService } from './answers.service';
+import { Types } from 'mongoose';
 
-@Controller('questions')
+@Controller('answers')
 export class StudentAnswerController {
   constructor(private readonly studentAnswerService: StudentAnswerService) {}
   @UseGuards(JwtAuthGuard)
-  @Post()
+  @Post(':taskId')
   @UsePipes(new ValidationPipe())
   async create(
+    @Param('taskId') taskId: Types.ObjectId,
     @Body() answerTaskDto: AnswerTaskDto,
     @CurrentUser() user: UserDocument,
   ) {
-    console.log(user);
-    return this.studentAnswerService.answer(answerTaskDto, user._id);
+    console.log('hello', user, taskId, answerTaskDto);
+    return this.studentAnswerService.answer(answerTaskDto, taskId, user._id);
   }
   @UseGuards(JwtAuthGuard)
   @Get()

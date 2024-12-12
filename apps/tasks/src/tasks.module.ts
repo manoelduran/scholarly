@@ -10,6 +10,8 @@ import {
   QUESTION_PROCESSOR_SERVICE,
   QuestionDocument,
   QuestionSchema,
+  StudentAnswerDocument,
+  StudentAnswerSchema,
   TaskDocument,
   TaskSchema,
 } from '@app/common';
@@ -19,6 +21,9 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { QuestionsController } from './questions/questions.controller';
 import { QuestionsService } from './questions/questions.service';
 import { QuestionsRepository } from './questions/questions.repository';
+import { StudentAnswersRepository } from './answers/answers.repository';
+import { StudentAnswerService } from './answers/answers.service';
+import { StudentAnswerController } from './answers/answers.controller';
 
 @Module({
   imports: [
@@ -27,6 +32,7 @@ import { QuestionsRepository } from './questions/questions.repository';
     DatabaseModule.forFeature([
       { name: TaskDocument.name, schema: TaskSchema },
       { name: QuestionDocument.name, schema: QuestionSchema },
+      { name: StudentAnswerDocument.name, schema: StudentAnswerSchema },
     ]),
     LoggerModule,
     ConfigModule.forRoot({
@@ -62,12 +68,14 @@ import { QuestionsRepository } from './questions/questions.repository';
       },
     ]),
   ],
-  controllers: [TasksController, QuestionsController],
+  controllers: [TasksController, QuestionsController, StudentAnswerController],
   providers: [
     TasksService,
     TasksRepository,
     QuestionsService,
     QuestionsRepository,
+    StudentAnswersRepository,
+    StudentAnswerService,
   ],
 })
 export class TasksModule {}
