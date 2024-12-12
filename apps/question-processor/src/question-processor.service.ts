@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Ollama } from 'ollama';
 import { ConfigService } from '@nestjs/config';
-import { CreateQuestionDto } from '@app/common';
+import { AnswerTaskDto, CreateQuestionDto } from '@app/common';
 
 @Injectable()
 export class QuestionProcessorService {
@@ -43,6 +43,35 @@ export class QuestionProcessorService {
       const questions = JSON.parse(arrayString);
       console.log('Generated questions:', questions);
       return questions;
+    } catch (error) {
+      console.error('Error interacting with Ollama API:', error);
+      throw new Error('Failed to generate task');
+    }
+  }
+  async correct(data: AnswerTaskDto) {
+    try {
+      //   const prompt = `
+      //   Generate 7 questions with this type: ${data.answers[0].answer} and this difficulty level: ${data.difficulty} about this topic: ${data.header}:
+
+      //   Format the response as an array of objects with the following structure:
+      //   [
+      //     {
+      //       "question": "string",
+      //       "options": ["string", "string", "string", "string"],
+      //       "correctAnswer": "string"
+      //     },
+      //     ...
+      //   ]
+      // `;
+      const response = await this.ollama.chat({
+        model: 'llama3.2',
+        messages: [{ role: 'user', content: data.answers[0].answer }],
+      });
+
+      const content = response.message.content;
+
+      console.log('content:', content);
+      // return questions;
     } catch (error) {
       console.error('Error interacting with Ollama API:', error);
       throw new Error('Failed to generate task');
