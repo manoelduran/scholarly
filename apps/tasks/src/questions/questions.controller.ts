@@ -29,7 +29,6 @@ export class QuestionsController {
     @Body() createQuestionDto: CreateQuestionDto,
     @CurrentUser() user: UserDocument,
   ) {
-    console.log(user);
     return this.questionsService.create(createQuestionDto, user._id);
   }
   @UseGuards(JwtAuthGuard)

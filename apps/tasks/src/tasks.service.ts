@@ -16,16 +16,16 @@ export class TasksService {
   async create(createTaskDto: CreateTaskDto, creatorId: Types.ObjectId) {
     const questions = await this.questionRepository.find({});
     const list = [];
-    const matchedQuestions = questions.map((q) => {
+    questions.map((q) => {
       if (q.classGroup.includes(createTaskDto.title)) {
         list.push(q._id);
       }
     });
-    console.log('matchedQuestions.length', matchedQuestions.length);
+
     if (!list.length) {
       throw new NotFoundException('No questions found for this task');
     }
-    console.log('ok', list);
+
     return this.tasksRepository.create({
       ...createTaskDto,
       creatorId,

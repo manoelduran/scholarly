@@ -41,7 +41,7 @@ export class QuestionProcessorService {
 
       const arrayString = arrayMatch[0];
       const questions = JSON.parse(arrayString);
-      console.log('Generated questions:', questions);
+
       return questions;
     } catch (error) {
       console.error('Error interacting with Ollama API:', error);
@@ -52,7 +52,6 @@ export class QuestionProcessorService {
     data: Record<string, { correctAnswer: string; answer: Answer }>,
   ) {
     try {
-      console.log('data:', data);
       const questionComparisons = Object.entries(data)
         .map(
           ([questionId, { correctAnswer, answer }]) =>

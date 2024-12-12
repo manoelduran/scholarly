@@ -31,7 +31,6 @@ export class StudentAnswerController {
     @Body() answerTaskDto: AnswerTaskDto,
     @CurrentUser() user: UserDocument,
   ) {
-    console.log('hello', user, taskId, answerTaskDto);
     return this.studentAnswerService.answer(answerTaskDto, taskId, user._id);
   }
   @UseGuards(JwtAuthGuard)
