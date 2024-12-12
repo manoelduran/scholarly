@@ -13,9 +13,13 @@ export class StudentAnswerService {
     private readonly questionProcessorService: ClientProxy,
   ) {}
 
-  async answer(answerTaskDto: AnswerTaskDto, creatorId: Types.ObjectId) {
+  async answer(
+    answerTaskDto: AnswerTaskDto,
+    taskId: Types.ObjectId,
+    creatorId: Types.ObjectId,
+  ) {
     console.log(answerTaskDto, creatorId);
-    await this.validateDto(answerTaskDto);
+    await this.validateDto(taskId);
     return this.questionProcessorService
       .send('answered_task', answerTaskDto)
       .pipe(
@@ -27,10 +31,10 @@ export class StudentAnswerService {
         }),
       );
   }
-  private async validateDto(answerTaskDto: AnswerTaskDto) {
+  private async validateDto(taskId: Types.ObjectId) {
     try {
       await this.studentAnswerRepository.findOne({
-        taskId: answerTaskDto.taskId,
+        taskId: taskId,
       });
     } catch (err) {
       return;
