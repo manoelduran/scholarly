@@ -20,14 +20,13 @@ export class StudentAnswerService {
     taskId: Types.ObjectId,
     creatorId: Types.ObjectId,
   ) {
-    console.log(answerTaskDto, creatorId);
-    await this.validateDto(taskId);
+    await this.validateDto(taskId, creatorId);
 
     const questions = await this.questionRepository.find({
       _id: { $in: answerTaskDto.answers.map((a) => a.questionId) },
     });
-    // create a hash map that have the questionId as a key and compare the answers with the correct answer from the question
-    const questionHashTable: Record<
+
+    const answeredQuestions: Record<
       string,
       { correctAnswer: string; answer: Answer }
     > = {};
@@ -35,15 +34,15 @@ export class StudentAnswerService {
       const answer = answerTaskDto.answers.find(
         (a) => a.questionId.toString() === question._id.toString(),
       );
-      console.log('answer', answer);
-      questionHashTable[question._id.toString()] = {
+
+      answeredQuestions[question._id.toString()] = {
         correctAnswer: question.correctAnswer,
         answer: answer,
       };
     }
-    console.log('questions 321', questionHashTable);
+
     return this.questionProcessorService
-      .send('answered_task', questionHashTable)
+      .send('answered_task', answeredQuestions)
       .pipe(
         map((res) => {
           console.log('res', res);
@@ -54,10 +53,11 @@ export class StudentAnswerService {
         }),
       );
   }
-  private async validateDto(taskId: Types.ObjectId) {
+  private async validateDto(taskId: Types.ObjectId, creatorId: Types.ObjectId) {
     try {
       await this.studentAnswerRepository.findOne({
         taskId: taskId,
+        studentId: creatorId,
       });
     } catch (err) {
       return;
