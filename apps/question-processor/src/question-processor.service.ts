@@ -59,9 +59,20 @@ export class QuestionProcessorService {
         )
         .join('\n\n');
       const prompt = `
-        Compare each question's correct answer with the user's answer and return the result of the comparison for each question:
-        
-        ${questionComparisons}
+      Compare each question's correct answer with the user's answer.
+
+      Questions to compare:
+
+      ${questionComparisons}
+      Format the response as an array of objects with the following structure:
+      [
+        {
+          "questionId": "string",
+          "correct": "boolean",
+          "score": "number";
+        },
+        ...
+      ]
       `;
       const response = await this.ollama.chat({
         model: 'llama3.2',
