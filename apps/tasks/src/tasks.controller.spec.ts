@@ -126,5 +126,19 @@ describe('TasksController', () => {
           .mockRejectedValue(new NotFoundException()),
       );
     });
+    it('should return a list of tasks', async () => {
+      jest.spyOn(tasksService, 'find').mockResolvedValue([
+        {
+          title: 'Test Group',
+          isGraded: false,
+          _id: new Types.ObjectId(),
+          creatorId: user._id,
+        },
+      ]);
+      const result = await tasksController.list();
+
+      expect(result).toBeDefined();
+      expect(result).toHaveLength(1);
+    });
   });
 });
