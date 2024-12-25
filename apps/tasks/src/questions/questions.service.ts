@@ -39,7 +39,6 @@ export class QuestionsService {
               creatorId: creatorId,
             });
           }
-          // return 'Questions created successfully';
         }),
       );
   }
