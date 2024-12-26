@@ -14,7 +14,7 @@ import { QuestionsRepository } from './questions.repository';
 
 describe('QuestionsController', () => {
   let questionsController: QuestionsController;
-  let questionsService: QuestionsService;
+  // let questionsService: QuestionsService;
 
   const user = {
     _id: new Types.ObjectId(),
@@ -53,7 +53,7 @@ describe('QuestionsController', () => {
       .compile();
 
     questionsController = module.get<QuestionsController>(QuestionsController);
-    questionsService = module.get<QuestionsService>(QuestionsService);
+    // questionsService = module.get<QuestionsService>(QuestionsService);
   });
 
   describe('Questions', () => {
