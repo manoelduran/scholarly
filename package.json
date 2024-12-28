@@ -85,6 +85,7 @@
       "!**/main.(t|j)s",
       "!**/*.dto.(t|j)s",
       "!**/*.spec.(t|j)s",
+      "!**/*.guard.(t|j)s",
       "!**/node_modules/**",
       "!**/*.schema.(t|j)s",
       "!**/dist/**",
