@@ -3,6 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import {
   CreateQuestionDto,
   JwtAuthGuard,
+  QUESTION_PROCESSOR_SERVICE,
   QuestionDocument,
   QuestionType,
   UserDocument,
@@ -11,10 +12,12 @@ import {
 import { QuestionsService } from './questions.service';
 import { QuestionsController } from './questions.controller';
 import { QuestionsRepository } from './questions.repository';
+import { map, of } from 'rxjs';
 
 describe('QuestionsController', () => {
   let questionsController: QuestionsController;
-  // let questionsService: QuestionsService;
+  let questionsService: QuestionsService;
+  let questionsRepository: QuestionsRepository;
 
   const user = {
     _id: new Types.ObjectId(),
@@ -22,7 +25,78 @@ describe('QuestionsController', () => {
     password: 'dasdsa',
     roles: ['teacher'],
   } as UserDocument;
-
+  const questions = [
+    {
+      _id: new Types.ObjectId(),
+      correctAnswer: 'Brasília',
+      creatorId: user._id,
+      difficulty: 'easy',
+      header: 'What is the capital of Brazil?',
+      type: QuestionType.Object,
+      options: ['Rio de Janeiro', 'São Paulo', 'Brasília', 'Curitiba'],
+      tags: ['geography'],
+    },
+    {
+      _id: new Types.ObjectId(),
+      correctAnswer: 'Brasília',
+      creatorId: user._id,
+      difficulty: 'easy',
+      header: 'What is the capital of Brazil?',
+      type: QuestionType.Object,
+      options: ['Rio de Janeiro', 'São Paulo', 'Brasília', 'Curitiba'],
+      tags: ['geography'],
+    },
+    {
+      _id: new Types.ObjectId(),
+      correctAnswer: 'Brasília',
+      creatorId: user._id,
+      difficulty: 'easy',
+      header: 'What is the capital of Brazil?',
+      type: QuestionType.Object,
+      options: ['Rio de Janeiro', 'São Paulo', 'Brasília', 'Curitiba'],
+      tags: ['geography'],
+    },
+    {
+      _id: new Types.ObjectId(),
+      correctAnswer: 'Brasília',
+      creatorId: user._id,
+      difficulty: 'easy',
+      header: 'What is the capital of Brazil?',
+      type: QuestionType.Object,
+      options: ['Rio de Janeiro', 'São Paulo', 'Brasília', 'Curitiba'],
+      tags: ['geography'],
+    },
+    {
+      _id: new Types.ObjectId(),
+      correctAnswer: 'Brasília',
+      creatorId: user._id,
+      difficulty: 'easy',
+      header: 'What is the capital of Brazil?',
+      type: QuestionType.Object,
+      options: ['Rio de Janeiro', 'São Paulo', 'Brasília', 'Curitiba'],
+      tags: ['geography'],
+    },
+    {
+      _id: new Types.ObjectId(),
+      correctAnswer: 'Brasília',
+      creatorId: user._id,
+      difficulty: 'easy',
+      header: 'What is the capital of Brazil?',
+      type: QuestionType.Object,
+      options: ['Rio de Janeiro', 'São Paulo', 'Brasília', 'Curitiba'],
+      tags: ['geography'],
+    },
+    {
+      _id: new Types.ObjectId(),
+      correctAnswer: 'Brasília',
+      creatorId: user._id,
+      difficulty: 'easy',
+      header: 'What is the capital of Brazil?',
+      type: QuestionType.Object,
+      options: ['Rio de Janeiro', 'São Paulo', 'Brasília', 'Curitiba'],
+      tags: ['geography'],
+    },
+  ] as QuestionDocument[];
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [QuestionsController],
@@ -31,7 +105,6 @@ describe('QuestionsController', () => {
           provide: QuestionsService,
           useValue: {
             create: jest.fn(),
-            find: jest.fn(),
           },
         },
         {
@@ -39,9 +112,12 @@ describe('QuestionsController', () => {
           useValue: {
             create: jest.fn(),
             findOne: jest.fn(),
-            findOneAndUpdate: jest.fn(),
-            find: jest.fn(),
-            findOneAndDelete: jest.fn(),
+          },
+        },
+        {
+          provide: QUESTION_PROCESSOR_SERVICE,
+          useValue: {
+            send: jest.fn(() => of(questions)),
           },
         },
       ],
@@ -53,7 +129,8 @@ describe('QuestionsController', () => {
       .compile();
 
     questionsController = module.get<QuestionsController>(QuestionsController);
-    // questionsService = module.get<QuestionsService>(QuestionsService);
+    questionsService = module.get<QuestionsService>(QuestionsService);
+    questionsRepository = module.get<QuestionsRepository>(QuestionsRepository);
   });
 
   describe('Questions', () => {
@@ -64,78 +141,34 @@ describe('QuestionsController', () => {
         tags: ['geography'],
         type: QuestionType.Object,
       } as CreateQuestionDto;
-      const questions = [
-        {
-          _id: new Types.ObjectId(),
-          correctAnswer: 'Brasília',
-          creatorId: user._id,
-          difficulty: 'easy',
-          header: 'What is the capital of Brazil?',
-          type: 'multiple-choice',
-          options: ['Rio de Janeiro', 'São Paulo', 'Brasília', 'Curitiba'],
-          tags: ['geography'],
-        },
-      ] as QuestionDocument[];
-      // jest.spyOn(questionsService, 'create').mockReturnValue(questions);
+
+      jest.spyOn(questionsService, 'create').mockResolvedValue(
+        of(questions).pipe(
+          map((res) => {
+            for (const question of res) {
+              questionsRepository.create({
+                header: question.header,
+                classGroup: question.classGroup,
+                type: question.type,
+                options: question.options,
+                correctAnswer: question.correctAnswer,
+                difficulty: question.difficulty,
+                tags: question.tags,
+                creatorId: question.creatorId,
+              });
+            }
+          }),
+        ),
+      );
       const result = await questionsController.create(questionDto, user);
-      console.log('result', result);
+      result.subscribe();
+
       expect(result).toBeDefined();
-      expect(result).toBeInstanceOf(Types.ObjectId);
+      expect(questionsService.create).toHaveBeenCalledWith(
+        questionDto,
+        user._id,
+      );
+      expect(questionsRepository.create).toHaveBeenCalledTimes(7);
     });
-    // it('should throw NotFoundException when no questions match the classGroup', async () => {
-    //   const taskDto2 = {
-    //     title: 'Nonexistent',
-    //     isGraded: false,
-    //   } as CreateTaskDto;
-
-    //   const questions = [
-    //     {
-    //       _id: new Types.ObjectId(),
-    //       correctAnswer: 'Brasília',
-    //       creatorId: user._id,
-    //       difficulty: 'easy',
-    //       header: 'What is the capital of Brazil?',
-    //       type: 'multiple-choice',
-    //       options: ['Rio de Janeiro', 'São Paulo', 'Brasília', 'Curitiba'],
-    //       tags: ['geography'],
-    //       classGroup: 'aloha',
-    //     },
-    //   ] as QuestionDocument[];
-    //   const task = {
-    //     ...taskDto2,
-    //     _id: new Types.ObjectId(),
-    //     creatorId: user._id,
-    //     questions: [],
-    //   };
-
-    //   const list = [];
-
-    //   questions.map((q) => {
-    //     if (q.classGroup.includes(task.title)) {
-    //       list.push(q._id);
-    //     }
-    //   });
-
-    //   expect(list).toHaveLength(0);
-    //   expect(
-    //     jest
-    //       .spyOn(tasksService, 'create')
-    //       .mockRejectedValue(new NotFoundException()),
-    //   );
-    // });
-    // it('should return a list of tasks', async () => {
-    //   jest.spyOn(tasksService, 'find').mockResolvedValue([
-    //     {
-    //       title: 'Test Group',
-    //       isGraded: false,
-    //       _id: new Types.ObjectId(),
-    //       creatorId: user._id,
-    //     },
-    //   ]);
-    //   const result = await tasksController.list();
-
-    //   expect(result).toBeDefined();
-    //   expect(result).toHaveLength(1);
-    // });
   });
 });
