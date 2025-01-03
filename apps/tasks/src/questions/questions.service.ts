@@ -1,8 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { UpdateQuestionDto } from './dto/update-question.dto';
 import { QuestionsRepository } from './questions.repository';
 import { CreateQuestionDto, QUESTION_PROCESSOR_SERVICE } from '@app/common';
@@ -22,7 +18,6 @@ export class QuestionsService {
     createQuestionDto: CreateQuestionDto,
     creatorId: Types.ObjectId,
   ) {
-    await this.validateCreateQuestionDto(createQuestionDto);
     return this.questionProcessorService
       .send('create_question', createQuestionDto)
       .pipe(
@@ -42,23 +37,12 @@ export class QuestionsService {
         }),
       );
   }
-  private async validateCreateQuestionDto(
-    createQuestionDto: CreateQuestionDto,
-  ) {
-    try {
-      await this.questionsRepository.findOne({
-        header: createQuestionDto.header,
-      });
-    } catch (err) {
-      return;
-    }
-    throw new UnprocessableEntityException('This question already exists.');
-  }
+
   async findAll() {
     return await this.questionsRepository.find({});
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     return await this.questionsRepository.findOne({ _id: id });
   }
 
