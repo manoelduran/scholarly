@@ -12,6 +12,7 @@ import { QuestionsService } from './questions.service';
 import { QuestionsController } from './questions.controller';
 import { QuestionsRepository } from './questions.repository';
 import { map, of } from 'rxjs';
+import { UpdateQuestionDto } from '@app/common/dto/update-question.dto';
 
 describe('QuestionsController', () => {
   let questionsController: QuestionsController;
@@ -106,6 +107,7 @@ describe('QuestionsController', () => {
             create: jest.fn(),
             findAll: jest.fn(),
             findOne: jest.fn(),
+            update: jest.fn(),
           },
         },
         {
@@ -114,6 +116,7 @@ describe('QuestionsController', () => {
             create: jest.fn(),
             find: jest.fn(),
             findOne: jest.fn(),
+            findOneAndUpdate: jest.fn(),
           },
         },
         {
@@ -185,6 +188,35 @@ describe('QuestionsController', () => {
       expect(result).toBeDefined();
       expect(questionsService.findOne).toHaveBeenCalledWith(
         questions[0]._id.toString(),
+      );
+    });
+    it('should update a question', async () => {
+      const updateQuestionDto = {
+        difficulty: 'medium',
+        header: 'What is the capital of Brazil?',
+        tags: ['geography'],
+        type: QuestionType.Object,
+      } as UpdateQuestionDto;
+      const updatedQuestion = {
+        _id: new Types.ObjectId(),
+        correctAnswer: 'Brasília',
+        creatorId: user._id,
+        difficulty: 'medium',
+        classGroup: 'What is the capital of Brazil?',
+        header: 'What is the capital of Brazil?',
+        type: QuestionType.Object,
+        options: ['Rio de Janeiro', 'São Paulo', 'Brasília', 'Curitiba'],
+        tags: ['geography'],
+      };
+      jest.spyOn(questionsService, 'update').mockResolvedValue(updatedQuestion);
+      const result = await questionsController.update(
+        questions[0]._id.toString(),
+        updateQuestionDto,
+      );
+      expect(result).toEqual(updatedQuestion);
+      expect(questionsService.update).toHaveBeenCalledWith(
+        questions[0]._id.toString(),
+        updateQuestionDto,
       );
     });
   });
