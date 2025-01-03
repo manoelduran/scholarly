@@ -8,7 +8,6 @@ import {
   QuestionType,
   UserDocument,
 } from '@app/common';
-
 import { QuestionsService } from './questions.service';
 import { QuestionsController } from './questions.controller';
 import { QuestionsRepository } from './questions.repository';
@@ -105,12 +104,15 @@ describe('QuestionsController', () => {
           provide: QuestionsService,
           useValue: {
             create: jest.fn(),
+            findAll: jest.fn(),
+            findOne: jest.fn(),
           },
         },
         {
           provide: QuestionsRepository,
           useValue: {
             create: jest.fn(),
+            find: jest.fn(),
             findOne: jest.fn(),
           },
         },
@@ -169,6 +171,21 @@ describe('QuestionsController', () => {
         user._id,
       );
       expect(questionsRepository.create).toHaveBeenCalledTimes(7);
+    });
+    it('should return all questions', async () => {
+      jest.spyOn(questionsService, 'findAll').mockResolvedValue(questions);
+      const result = await questionsController.findAll();
+      expect(result).toEqual(questions);
+    });
+    it('should return one question', async () => {
+      jest.spyOn(questionsService, 'findOne').mockResolvedValue(questions[0]);
+      const result = await questionsController.findOne(
+        questions[0]._id.toString(),
+      );
+      expect(result).toBeDefined();
+      expect(questionsService.findOne).toHaveBeenCalledWith(
+        questions[0]._id.toString(),
+      );
     });
   });
 });

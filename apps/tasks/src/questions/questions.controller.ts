@@ -39,7 +39,7 @@ export class QuestionsController {
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return this.questionsService.findOne(+id);
+    return this.questionsService.findOne(id);
   }
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
