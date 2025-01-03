@@ -46,7 +46,7 @@ export class QuestionsService {
     return await this.questionsRepository.findOne({ _id: id });
   }
 
-  async update(id: number, updateQuestionDto: UpdateQuestionDto) {
+  async update(id: string, updateQuestionDto: UpdateQuestionDto) {
     return await this.questionsRepository.findOneAndUpdate(
       {
         _id: id,
@@ -55,7 +55,7 @@ export class QuestionsService {
     );
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return await this.questionsRepository.findOneAndDelete({
       _id: id,
     });
