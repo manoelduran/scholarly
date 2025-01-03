@@ -108,6 +108,7 @@ describe('QuestionsController', () => {
             findAll: jest.fn(),
             findOne: jest.fn(),
             update: jest.fn(),
+            remove: jest.fn(),
           },
         },
         {
@@ -117,6 +118,7 @@ describe('QuestionsController', () => {
             find: jest.fn(),
             findOne: jest.fn(),
             findOneAndUpdate: jest.fn(),
+            findOneAndDelete: jest.fn(),
           },
         },
         {
@@ -217,6 +219,16 @@ describe('QuestionsController', () => {
       expect(questionsService.update).toHaveBeenCalledWith(
         questions[0]._id.toString(),
         updateQuestionDto,
+      );
+    });
+    it('should remove a question', async () => {
+      jest.spyOn(questionsService, 'remove').mockResolvedValue(questions[0]);
+      const result = await questionsController.remove(
+        questions[0]._id.toString(),
+      );
+      expect(result).toEqual(questions[0]);
+      expect(questionsService.remove).toHaveBeenCalledWith(
+        questions[0]._id.toString(),
       );
     });
   });
