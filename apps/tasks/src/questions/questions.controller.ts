@@ -11,9 +11,9 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { QuestionsService } from './questions.service';
-import { UpdateQuestionDto } from './dto/update-question.dto';
 import {
   CreateQuestionDto,
+  UpdateQuestionDto,
   CurrentUser,
   JwtAuthGuard,
   UserDocument,

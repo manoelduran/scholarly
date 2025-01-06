@@ -1,7 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { UpdateQuestionDto } from './dto/update-question.dto';
+
 import { QuestionsRepository } from './questions.repository';
-import { CreateQuestionDto, QUESTION_PROCESSOR_SERVICE } from '@app/common';
+import {
+  CreateQuestionDto,
+  UpdateQuestionDto,
+  QUESTION_PROCESSOR_SERVICE,
+} from '@app/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { map } from 'rxjs';
 import { Types } from 'mongoose';
