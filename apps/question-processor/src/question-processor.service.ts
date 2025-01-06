@@ -59,11 +59,9 @@ export class QuestionProcessorService {
         )
         .join('\n\n');
       const prompt = `
-      Compare each question's correct answer with the user's answer.
+      Compare each question's from ${questionComparisons}, look at the "Correct Answer" and "User Answer" if it's equal mark correct as true and add 1 to the score.
 
-      Questions to compare:
 
-      ${questionComparisons}
       Format the response as an array of objects with the following structure:
       [
         {
