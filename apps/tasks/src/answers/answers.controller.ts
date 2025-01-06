@@ -41,19 +41,11 @@ export class StudentAnswerController {
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return this.studentAnswerService.findOne(+id);
+    return this.studentAnswerService.findOne(id);
   }
-  // @UseGuards(JwtAuthGuard)
-  // @Patch(':id')
-  // async update(
-  //   @Param('id') id: string,
-  //   @Body() updateQuestionDto: UpdateQuestionDto,
-  // ) {
-  //   return this.studentAnswerService.update(+id, updateQuestionDto);
-  // }
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    return this.studentAnswerService.remove(+id);
+    return this.studentAnswerService.remove(id);
   }
 }

@@ -68,20 +68,11 @@ export class StudentAnswerService {
     return await this.studentAnswerRepository.find({});
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     return await this.studentAnswerRepository.findOne({ _id: id });
   }
 
-  async update(id: number, updateAnswerDto: any) {
-    return await this.studentAnswerRepository.findOneAndUpdate(
-      {
-        _id: id,
-      },
-      updateAnswerDto,
-    );
-  }
-
-  async remove(id: number) {
+  async remove(id: string) {
     return await this.studentAnswerRepository.findOneAndDelete({
       _id: id,
     });
