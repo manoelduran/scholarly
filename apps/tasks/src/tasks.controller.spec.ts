@@ -54,7 +54,7 @@ describe('TasksController', () => {
     tasksService = module.get<TasksService>(TasksService);
   });
 
-  describe('A teacher can create a task', () => {
+  describe('Task', () => {
     it('should create a new task', async () => {
       const taskDto = {
         title: 'Test Group',
