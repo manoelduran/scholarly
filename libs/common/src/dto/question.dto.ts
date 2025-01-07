@@ -1,8 +1,8 @@
 import { Types } from 'mongoose';
 
 export enum QuestionType {
-  Subject = 'subject',
-  Object = 'object',
+  MultipleChoise = 'multiple-choice',
+  Discursive = 'discursive',
 }
 
 export enum DifficultyLevel {
