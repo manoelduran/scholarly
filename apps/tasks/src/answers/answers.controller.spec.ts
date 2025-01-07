@@ -61,7 +61,7 @@ describe('AnswersController', () => {
     {
       _id: new Types.ObjectId(),
       taskId: new Types.ObjectId(),
-      studentId: new Types.ObjectId(),
+      studentId: user._id,
       answers: [
         {
           questionId: new Types.ObjectId(),
