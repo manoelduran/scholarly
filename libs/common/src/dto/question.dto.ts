@@ -18,7 +18,7 @@ export interface QuestionDto {
 
   type: QuestionType;
 
-  options: string[];
+  options?: string[];
 
   classGroup: string;
 

@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import {
   Answer,
   AnswerTaskDto,
@@ -62,19 +62,23 @@ export class StudentAnswerService {
         };
       }
     }
-
-    // if (Object.keys(discursiveAnswers).length > 0) {
-    //   await this.questionProcessorService
-    //     .send('answered_task', discursiveAnswers)
-    //     .pipe(
-    //       map((res) => {
-    //         console.log('res', res);
-    //       }),
-    //     );
-    // }
+    console.log(
+      'Object.keys(discursiveAnswers).length',
+      Object.keys(discursiveAnswers).length,
+    );
+    if (Object.keys(discursiveAnswers).length > 0) {
+      console.log('discursiveAnswers', discursiveAnswers);
+      this.questionProcessorService
+        .send('answered_task', discursiveAnswers)
+        .pipe(
+          map((res) => {
+            console.log('res', res);
+          }),
+        );
+    }
 
     const totalScore = answers.reduce((acc, curr) => acc + curr.score, 0);
-    console.log('answers', answers);
+
     return this.studentAnswerRepository.create({
       isSubmitted: true,
       taskId: taskId,
@@ -92,7 +96,7 @@ export class StudentAnswerService {
     } catch (err) {
       return;
     }
-    throw new NotFoundException('This task does not exists.');
+    throw new BadRequestException('Answer already submitted');
   }
   async findAll() {
     return await this.studentAnswerRepository.find({});
