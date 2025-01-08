@@ -15,7 +15,11 @@ export class QuestionProcessorController {
   }
   @MessagePattern('answered_task')
   correct(
-    @Payload() data: Record<string, { correctAnswer: string; answer: Answer }>,
+    @Payload()
+    data: Record<
+      string,
+      { questionHeader: string; correctAnswer: string; studentAnswer: Answer }
+    >,
   ) {
     return this.questionProcessorService.correct(data);
   }
