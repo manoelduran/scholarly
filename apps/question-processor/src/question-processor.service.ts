@@ -49,17 +49,17 @@ export class QuestionProcessorService {
     }
   }
   async correct(
-    data: Record<string, { correctAnswer: string; answer: Answer }>,
+    data: Record<string, { correctAnswer: string; studentAnswer: Answer }>,
   ) {
     try {
       const questionComparisons = Object.entries(data)
         .map(
-          ([questionId, { correctAnswer, answer }]) =>
-            `Question ID: ${questionId}\nCorrect Answer: ${correctAnswer}\nUser Answer: ${answer.answer}`,
+          ([questionId, { correctAnswer, studentAnswer }]) =>
+            `Question ID: ${questionId}\nCorrect Answer: ${correctAnswer}\nUser Answer: ${studentAnswer.answer}`,
         )
         .join('\n\n');
       const prompt = `
-      Compare each question's from ${questionComparisons}, look at the "Correct Answer" and "User Answer" if it's equal mark correct as true and add 1 to the score.
+      Compare each question's from ${questionComparisons}, look at the "Correct Answer" and "User Answer" and give a score between 0 and 1 considering 0 the minimal score that an student can get and 1 the maximum score. If the answer score is greather than 0.7 the answer is correct, mark as true and show the score, if not mark as false and show the score.
 
 
       Format the response as an array of objects with the following structure:
