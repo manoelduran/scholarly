@@ -11,8 +11,6 @@ export interface TaskDto {
 
   isGraded: boolean;
 
-  totalScore?: number;
-
   dueDate?: Date;
 
   creatorId: Types.ObjectId;

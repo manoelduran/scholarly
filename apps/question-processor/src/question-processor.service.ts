@@ -78,9 +78,19 @@ export class QuestionProcessorService {
       });
 
       const content = response.message.content;
-
       console.log('content:', content);
-      return content;
+      // Extract the array of questions from the response
+      const arrayMatch = content.match(/\[(\s*{[^]*}\s*)\]/);
+
+      if (!arrayMatch) {
+        throw new Error('Array not found in content');
+      }
+      console.log('arrayMatch:', arrayMatch);
+      const arrayString = arrayMatch[0];
+      console.log('arrayString:', arrayString);
+      const answers = JSON.parse(arrayString);
+      console.log('answers:', answers);
+      return answers;
     } catch (error) {
       console.error('Error interacting with Ollama API:', error);
       throw new Error('Failed to correct task');

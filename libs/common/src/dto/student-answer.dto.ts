@@ -4,12 +4,13 @@ export class Answer {
   questionId: Types.ObjectId;
   answer: string;
   isCorrect?: boolean;
+  score?: number;
 }
 
 export interface StudentAnswerDto {
   _id?: Types.ObjectId;
 
-  score?: number;
+  totalScore?: number;
 
   answers: Answer[];
 
