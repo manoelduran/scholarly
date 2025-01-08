@@ -18,7 +18,7 @@ export class StudentAnswerDocument extends AbstractDocument {
   answers: Answer[];
 
   @Prop({ required: false, type: Number })
-  score?: number;
+  totalScore?: number;
 
   @Prop({ required: true, default: false, type: Boolean })
   isSubmitted: boolean;
