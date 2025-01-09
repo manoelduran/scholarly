@@ -62,7 +62,6 @@ export class QuestionProcessorService {
             `Question ID: ${questionId}\nQuestion Header: ${questionHeader}\nCorrect Answer: ${correctAnswer}\nUser Answer: ${studentAnswer.answer}`,
         )
         .join('\n\n');
-      console.log('questionComparisons:', questionComparisons);
 
       const prompt = `
           You are a teacher grading student answers. For each question below, identify whether the "User Answer" is correct or contains errors compared to the "Correct Answer," taking into account the "Question Header."
@@ -90,7 +89,7 @@ export class QuestionProcessorService {
       });
 
       const content = response.message.content;
-      console.log('content:', content);
+
       try {
         const feedbackArray = JSON.parse(content);
 
@@ -108,7 +107,7 @@ export class QuestionProcessorService {
             };
           },
         );
-        console.log('results:', results);
+
         return results;
       } catch (jsonError) {
         console.error('Failed to parse JSON:', jsonError);

@@ -33,12 +33,11 @@ export class StudentAnswerService {
     const answerMap = new Map(
       answerTaskDto.answers.map((a) => [a.questionId.toString(), a]),
     );
-    console.log('answerMap', answerMap);
 
     const questions = await this.questionRepository.find({
       _id: { $in: Array.from(answerMap.keys()) },
     });
-    console.log('questions', questions);
+
     const answers: Partial<Answer[]> = [];
     const discursiveAnswers: Record<
       string,
@@ -65,22 +64,20 @@ export class StudentAnswerService {
     }
 
     if (Object.keys(discursiveAnswers).length > 0) {
-      console.log('discursiveAnswers', discursiveAnswers);
       // Use firstValueFrom to handle the observable properly with async/await
       await firstValueFrom(
         this.questionProcessorService
           .send('answered_task', discursiveAnswers)
           .pipe(
             map((response) => {
-              console.log('response from processor', response);
               answers.push(...response);
             }),
           ),
       );
     }
-    console.log('answers', answers);
+
     const totalScore = answers.reduce((acc, curr) => acc + curr.score, 0);
-    console.log('totalScore', totalScore);
+
     this.studentAnswerRepository.create({
       isSubmitted: true,
       taskId: taskId,
