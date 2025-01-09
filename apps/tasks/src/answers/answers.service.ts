@@ -6,7 +6,7 @@ import {
   QuestionType,
 } from '@app/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { map } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 import { Types } from 'mongoose';
 import { StudentAnswersRepository } from './answers.repository';
 import { QuestionsRepository } from '../questions/questions.repository';
@@ -39,10 +39,10 @@ export class StudentAnswerService {
       _id: { $in: Array.from(answerMap.keys()) },
     });
     console.log('questions', questions);
-    const answers: Answer[] = [];
+    const answers: Partial<Answer[]> = [];
     const discursiveAnswers: Record<
       string,
-      { correctAnswer: string; studentAnswer: Answer }
+      { questionHeader: string; correctAnswer: string; studentAnswer: Answer }
     > = {};
     for (const question of questions) {
       const answer = answerMap.get(question._id.toString());
@@ -57,29 +57,31 @@ export class StudentAnswerService {
       }
       if (question.type === QuestionType.Discursive) {
         discursiveAnswers[question._id.toString()] = {
+          questionHeader: question.header,
           correctAnswer: question.correctAnswer,
           studentAnswer: answer,
         };
       }
     }
-    console.log(
-      'Object.keys(discursiveAnswers).length',
-      Object.keys(discursiveAnswers).length,
-    );
+
     if (Object.keys(discursiveAnswers).length > 0) {
       console.log('discursiveAnswers', discursiveAnswers);
-      this.questionProcessorService
-        .send('answered_task', discursiveAnswers)
-        .pipe(
-          map((res) => {
-            console.log('res', res);
-          }),
-        );
+      // Use firstValueFrom to handle the observable properly with async/await
+      await firstValueFrom(
+        this.questionProcessorService
+          .send('answered_task', discursiveAnswers)
+          .pipe(
+            map((response) => {
+              console.log('response from processor', response);
+              answers.push(...response);
+            }),
+          ),
+      );
     }
-
+    console.log('answers', answers);
     const totalScore = answers.reduce((acc, curr) => acc + curr.score, 0);
-
-    return this.studentAnswerRepository.create({
+    console.log('totalScore', totalScore);
+    this.studentAnswerRepository.create({
       isSubmitted: true,
       taskId: taskId,
       studentId: creatorId,
