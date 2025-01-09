@@ -103,7 +103,7 @@ export class QuestionProcessorService {
             const score = this.calculateScore(item.errors);
             return {
               questionId: item.questionId,
-              correct: score >= 0.7,
+              isCorrect: score >= 0.7,
               score,
             };
           },
