@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Ollama } from 'ollama';
 import { ConfigService } from '@nestjs/config';
 import { Answer, CreateQuestionDto } from '@app/common';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class QuestionProcessorService {
@@ -49,51 +50,79 @@ export class QuestionProcessorService {
     }
   }
   async correct(
-    data: Record<string, { correctAnswer: string; studentAnswer: Answer }>,
+    data: Record<
+      string,
+      { questionHeader: string; correctAnswer: string; studentAnswer: Answer }
+    >,
   ) {
     try {
       const questionComparisons = Object.entries(data)
         .map(
-          ([questionId, { correctAnswer, studentAnswer }]) =>
-            `Question ID: ${questionId}\nCorrect Answer: ${correctAnswer}\nUser Answer: ${studentAnswer.answer}`,
+          ([questionId, { questionHeader, correctAnswer, studentAnswer }]) =>
+            `Question ID: ${questionId}\nQuestion Header: ${questionHeader}\nCorrect Answer: ${correctAnswer}\nUser Answer: ${studentAnswer.answer}`,
         )
         .join('\n\n');
+      console.log('questionComparisons:', questionComparisons);
+
       const prompt = `
-      Compare each question's from ${questionComparisons}, look at the "Correct Answer" and "User Answer" and give a score between 0 and 1 considering 0 the minimal score that an student can get and 1 the maximum score. If the answer score is greather than 0.7 the answer is correct, mark as true and show the score, if not mark as false and show the score.
+          You are a teacher grading student answers. For each question below, identify whether the "User Answer" is correct or contains errors compared to the "Correct Answer," taking into account the "Question Header."
 
+          Respond in the format:
+          [
+              {
+                  "questionId": "string",
+                  "errors": ["string"],
+                  "feedback": "string"
+              },
+              ...
+          ]
 
-      Format the response as an array of objects with the following structure:
-      [
-        {
-          "questionId": "string",
-          "correct": "boolean",
-          "score": "number";
-        },
-        ...
-      ]
+          Evaluate the questions:
+          ${questionComparisons}
+
+          You must not include any additional information in the errors array, you must include only the errors and nothing more.
+          You must add a feedback message for each question.
       `;
       const response = await this.ollama.chat({
         model: 'llama3.2',
         messages: [{ role: 'user', content: prompt }],
+        options: { temperature: 1 },
       });
 
       const content = response.message.content;
       console.log('content:', content);
-      // Extract the array of questions from the response
-      const arrayMatch = content.match(/\[(\s*{[^]*}\s*)\]/);
+      try {
+        const feedbackArray = JSON.parse(content);
 
-      if (!arrayMatch) {
-        throw new Error('Array not found in content');
+        const results = feedbackArray.map(
+          (item: {
+            questionId: Types.ObjectId;
+            errors: string[];
+            feedback: string;
+          }) => {
+            const score = this.calculateScore(item.errors);
+            return {
+              questionId: item.questionId,
+              correct: score >= 0.7,
+              score,
+            };
+          },
+        );
+        console.log('results:', results);
+        return results;
+      } catch (jsonError) {
+        console.error('Failed to parse JSON:', jsonError);
+        throw new Error('Failed to parse feedback JSON');
       }
-      console.log('arrayMatch:', arrayMatch);
-      const arrayString = arrayMatch[0];
-      console.log('arrayString:', arrayString);
-      const answers = JSON.parse(arrayString);
-      console.log('answers:', answers);
-      return answers;
     } catch (error) {
       console.error('Error interacting with Ollama API:', error);
       throw new Error('Failed to correct task');
     }
+  }
+  private calculateScore(errors: string[]): number {
+    if (!errors || errors.length === 0) {
+      return 1;
+    }
+    return Math.max(0, 1 - errors.length * 0.2);
   }
 }
