@@ -7,6 +7,7 @@ import {
   AUTH_SERVICE,
   DatabaseModule,
   LoggerModule,
+  NOTIFICATION_SERVICE,
   QUESTION_PROCESSOR_SERVICE,
   QuestionDocument,
   QuestionSchema,
@@ -62,6 +63,17 @@ import { StudentAnswerController } from './answers/answers.controller';
           options: {
             urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
             queue: 'question_processor',
+          },
+        }),
+        inject: [ConfigService],
+      },
+      {
+        name: NOTIFICATION_SERVICE,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
+            queue: 'notification',
           },
         }),
         inject: [ConfigService],
