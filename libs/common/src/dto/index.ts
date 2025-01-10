@@ -5,3 +5,4 @@ export * from './create-question.dto';
 export * from './answer-task.dto';
 export * from './student-answer.dto';
 export * from './update-question.dto';
+export * from './notification.dto';
