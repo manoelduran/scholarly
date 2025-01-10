@@ -4,7 +4,7 @@ import { Types } from 'mongoose';
 
 @Schema({ versionKey: false })
 export class QuestionDocument extends AbstractDocument {
-  @Prop({ required: true, unique: true, type: String })
+  @Prop({ required: true, type: String })
   header: string;
 
   @Prop({ required: true, enum: QuestionType })
