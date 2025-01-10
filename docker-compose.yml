@@ -40,6 +40,18 @@ services:
       - '3002:3002'
     volumes:
       - .:/usr/src/app
+  notifications:
+    build:
+      context: .
+      dockerfile: ./apps/notifications/Dockerfile
+      target: development
+    command: pnpm run start:debug notifications
+    env_file:
+      - ./apps/notifications/.env
+    ports:
+      - '3003:3003'
+    volumes:
+      - .:/usr/src/app
   auth-mongo:
     image: mongo:latest
     container_name: scholarly-auth-mongo
@@ -58,6 +70,15 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: root
     ports:
       - '27018:27017'
+  notifications-mongo:
+    image: mongo:latest
+    container_name: scholarly-notifications-mongo
+    restart: 'unless-stopped'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - '27019:27017'
   rabbitmq:
     image: rabbitmq
     container_name: scholarly-rabitmq
