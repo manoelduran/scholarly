@@ -1,12 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Post } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
 
-@Controller()
+@Controller('notifications')
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
 
-  @Get()
-  getHello(): string {
-    return this.notificationsService.getHello();
+  // @UsePipes(new ValidationPipe())
+  // @EventPattern('notify')
+  @Post()
+  emit(): string {
+    return this.notificationsService.emit();
   }
 }
