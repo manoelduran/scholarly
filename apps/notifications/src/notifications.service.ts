@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { NotificationsRepository } from './notifications.repository';
-import { EmitNotificationsDto } from './dto/emit-notifications.dto';
+
 import { ConfigService } from '@nestjs/config';
+import { EmitNotificationsDto } from '@app/common';
 
 @Injectable()
 export class NotificationsService {
@@ -21,15 +22,16 @@ export class NotificationsService {
     private readonly configService: ConfigService,
   ) {}
 
-  async emit(email: EmitNotificationsDto['email']) {
+  async emit({ email, subject, text }: EmitNotificationsDto) {
     await this.transporter.sendMail({
       from: this.configService.getOrThrow('SMTP_USER'),
       to: email,
-      subject: 'Scholarly Notification',
-      text: 'Hello World!',
+      subject,
+      text,
     });
     const ok = await this.notificationsRepository.create({
-      message: 'Hello World!',
+      message: text,
+      subject,
       emittedBy: email,
     });
     return ok;
