@@ -1,7 +1,7 @@
 import { Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
 import { EventPattern, Payload } from '@nestjs/microservices';
-import { EmitNotificationsDto } from './dto/emit-notifications.dto';
+import { EmitNotificationsDto } from '@app/common';
 
 @Controller('notifications')
 export class NotificationsController {
@@ -11,6 +11,6 @@ export class NotificationsController {
   @EventPattern('notify_email')
   @Post()
   emit(@Payload() data: EmitNotificationsDto) {
-    return this.notificationsService.emit(data.email);
+    return this.notificationsService.emit(data);
   }
 }
