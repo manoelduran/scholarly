@@ -7,7 +7,7 @@ export class NotificationDocument extends AbstractDocument {
   message: string;
 
   @Prop({ required: true, enum: SubjectEnum })
-  subject: SubjectEnum;
+  subject: string;
 
   @Prop({ required: true, type: String })
   emittedBy: string;
