@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationsController } from './notifications.controller';
 import { NotificationsService } from './notifications.service';
+import { EmitNotificationsDto, SubjectEnum } from '@app/common';
 
 describe('NotificationsController', () => {
   let notificationsController: NotificationsController;
@@ -18,7 +19,12 @@ describe('NotificationsController', () => {
 
   describe('root', () => {
     it('should return "Hello World!"', () => {
-      expect(notificationsController.emit()).toBe('Hello World!');
+      const ok = {
+        email: 'dasdasdsa@gmail.com',
+        text: 'Hello World!',
+        subject: SubjectEnum['Answered Task'],
+      } as EmitNotificationsDto;
+      expect(notificationsController.emit(ok)).toBe('Hello World!');
     });
   });
 });
