@@ -2,6 +2,7 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import {
   Answer,
   AnswerTaskDto,
+  NOTIFICATION_SERVICE,
   QUESTION_PROCESSOR_SERVICE,
   QuestionType,
 } from '@app/common';
@@ -20,12 +21,15 @@ export class StudentAnswerService {
     private readonly tasksRepository: TasksRepository,
     @Inject(QUESTION_PROCESSOR_SERVICE)
     private readonly questionProcessorService: ClientProxy,
+    @Inject(NOTIFICATION_SERVICE)
+    private readonly notificationsService: ClientProxy,
   ) {}
 
   async answer(
     answerTaskDto: AnswerTaskDto,
     taskId: Types.ObjectId,
     creatorId: Types.ObjectId,
+    email: string,
   ) {
     await this.validateDto(taskId, creatorId);
 
@@ -77,7 +81,9 @@ export class StudentAnswerService {
     }
 
     const totalScore = answers.reduce((acc, curr) => acc + curr.score, 0);
-
+    await this.notificationsService.emit('notify_email', {
+      email,
+    });
     this.studentAnswerRepository.create({
       isSubmitted: true,
       taskId: taskId,
