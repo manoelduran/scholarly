@@ -1,14 +1,16 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
+import { CurrentUser, UserDocument } from '@app/common';
+import { EventPattern } from '@nestjs/microservices';
 
 @Controller('notifications')
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
 
-  // @UsePipes(new ValidationPipe())
-  // @EventPattern('notify')
+  @UsePipes(new ValidationPipe())
+  @EventPattern('notify')
   @Post()
-  emit(): string {
-    return this.notificationsService.emit();
+  emit(@CurrentUser() user: UserDocument) {
+    return this.notificationsService.emit(user.email);
   }
 }
