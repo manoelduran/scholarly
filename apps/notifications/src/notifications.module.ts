@@ -9,6 +9,7 @@ import {
   NotificationSchema,
 } from '@app/common';
 import { ConfigModule } from '@nestjs/config';
+import { NotificationsRepository } from './notifications.repository';
 
 @Module({
   imports: [
@@ -23,10 +24,14 @@ import { ConfigModule } from '@nestjs/config';
         PORT: Joi.number().required(),
         MONGODB_URI: Joi.string().required(),
         RABBITMQ_URI: Joi.string().required(),
+        GOOGLE_OAUTH_CLIENT_ID: Joi.string().required(),
+        GOOGLE_OAUTH_CLIENT_SECRET: Joi.string().required(),
+        GOOGLE_OAUTH_REFRESH_TOKEN: Joi.string().required(),
+        SMTP_USER: Joi.string().required(),
       }),
     }),
   ],
   controllers: [NotificationsController],
-  providers: [NotificationsService],
+  providers: [NotificationsService, NotificationsRepository],
 })
 export class NotificationsModule {}

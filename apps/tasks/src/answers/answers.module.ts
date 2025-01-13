@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import {
   AUTH_SERVICE,
   DatabaseModule,
+  NOTIFICATION_SERVICE,
   QUESTION_PROCESSOR_SERVICE,
   QuestionDocument,
   QuestionSchema,
@@ -43,6 +44,17 @@ import { QuestionsRepository } from '../questions/questions.repository';
           options: {
             urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
             queue: 'question_processor',
+          },
+        }),
+        inject: [ConfigService],
+      },
+      {
+        name: NOTIFICATION_SERVICE,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
+            queue: 'notification',
           },
         }),
         inject: [ConfigService],

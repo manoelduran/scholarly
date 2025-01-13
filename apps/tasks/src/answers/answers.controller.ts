@@ -31,7 +31,12 @@ export class StudentAnswerController {
     @Body() answerTaskDto: AnswerTaskDto,
     @CurrentUser() user: UserDocument,
   ) {
-    return this.studentAnswerService.answer(answerTaskDto, taskId, user._id);
+    return this.studentAnswerService.answer(
+      answerTaskDto,
+      taskId,
+      user._id,
+      user.email,
+    );
   }
   @UseGuards(JwtAuthGuard)
   @Get()
