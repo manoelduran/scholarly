@@ -1,8 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { SchoolsModule } from './schools.module';
 import { ConfigService } from '@nestjs/config';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { Transport } from '@nestjs/microservices';
+import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   const app = await NestFactory.create(SchoolsModule);
