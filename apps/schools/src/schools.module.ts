@@ -2,8 +2,14 @@ import { Module } from '@nestjs/common';
 import * as Joi from 'joi';
 import { SchoolsController } from './schools.controller';
 import { SchoolsService } from './schools.service';
-import { DatabaseModule, LoggerModule } from '@app/common';
+import {
+  DatabaseModule,
+  LoggerModule,
+  SchoolDocument,
+  SchoolSchema,
+} from '@app/common';
 import { ConfigModule } from '@nestjs/config';
+import { SchoolsRepository } from './schools.repository';
 
 @Module({
   imports: [
@@ -22,6 +28,6 @@ import { ConfigModule } from '@nestjs/config';
     }),
   ],
   controllers: [SchoolsController],
-  providers: [SchoolsService],
+  providers: [SchoolsService, SchoolsRepository],
 })
 export class SchoolsModule {}
