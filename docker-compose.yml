@@ -52,6 +52,18 @@ services:
       - '3003:3003'
     volumes:
       - .:/usr/src/app
+  schools:
+    build:
+      context: .
+      dockerfile: ./apps/schools/Dockerfile
+      target: development
+    command: pnpm run start:debug schools
+    env_file:
+      - ./apps/schools/.env
+    ports:
+      - '3004:3004'
+    volumes:
+      - .:/usr/src/app
   auth-mongo:
     image: mongo:latest
     container_name: scholarly-auth-mongo
@@ -79,6 +91,15 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: root
     ports:
       - '27019:27017'
+  schools-mongo:
+    image: mongo:latest
+    container_name: scholarly-schools-mongo
+    restart: 'unless-stopped'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - '27020:27017'
   rabbitmq:
     image: rabbitmq
     container_name: scholarly-rabitmq
