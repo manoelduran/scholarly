@@ -52,6 +52,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/notifications/tsconfig.app.json"
       }
+    },
+    "schools": {
+      "type": "application",
+      "root": "apps/schools",
+      "entryFile": "main",
+      "sourceRoot": "apps/schools/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/schools/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
