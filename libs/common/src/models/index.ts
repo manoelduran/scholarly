@@ -4,3 +4,4 @@ export * from './task.schema';
 export * from './school.schema';
 export * from './student-answer.schema';
 export * from './notification.schema';
+export * from './classroom.schema';
