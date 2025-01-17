@@ -3,6 +3,8 @@ import * as Joi from 'joi';
 import { SchoolsController } from './schools.controller';
 import { SchoolsService } from './schools.service';
 import {
+  ClassroomDocument,
+  ClassroomSchema,
   DatabaseModule,
   LoggerModule,
   SchoolDocument,
@@ -10,13 +12,16 @@ import {
 } from '@app/common';
 import { ConfigModule } from '@nestjs/config';
 import { SchoolsRepository } from './schools.repository';
+import { ClassroomsModule } from './classrooms/classrooms.module';
 
 @Module({
   imports: [
     DatabaseModule,
+    ClassroomsModule,
     LoggerModule,
     DatabaseModule.forFeature([
       { name: SchoolDocument.name, schema: SchoolSchema },
+      { name: ClassroomDocument.name, schema: ClassroomSchema },
     ]),
     ConfigModule.forRoot({
       isGlobal: true,

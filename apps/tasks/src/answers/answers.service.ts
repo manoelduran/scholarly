@@ -11,14 +11,12 @@ import { firstValueFrom, map } from 'rxjs';
 import { Types } from 'mongoose';
 import { StudentAnswersRepository } from './answers.repository';
 import { QuestionsRepository } from '../questions/questions.repository';
-import { TasksRepository } from '../tasks.repository';
 
 @Injectable()
 export class StudentAnswerService {
   constructor(
     private readonly studentAnswerRepository: StudentAnswersRepository,
     private readonly questionRepository: QuestionsRepository,
-    private readonly tasksRepository: TasksRepository,
     @Inject(QUESTION_PROCESSOR_SERVICE)
     private readonly questionProcessorService: ClientProxy,
     @Inject(NOTIFICATION_SERVICE)
