@@ -14,13 +14,13 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { StudentAnswerService } from './answers.service';
 import { StudentAnswersRepository } from './answers.repository';
 import { StudentAnswerController } from './answers.controller';
-import { QuestionsController } from '../questions/questions.controller';
-import { QuestionsService } from '../questions/questions.service';
+import { QuestionsModule } from '../questions/questions.module';
 import { QuestionsRepository } from '../questions/questions.repository';
 
 @Module({
   imports: [
     DatabaseModule,
+    QuestionsModule,
     DatabaseModule.forFeature([
       { name: StudentAnswerDocument.name, schema: StudentAnswerSchema },
       { name: QuestionDocument.name, schema: QuestionSchema },
@@ -61,12 +61,11 @@ import { QuestionsRepository } from '../questions/questions.repository';
       },
     ]),
   ],
-  controllers: [StudentAnswerController, QuestionsController],
+  controllers: [StudentAnswerController],
   providers: [
     StudentAnswerService,
     StudentAnswersRepository,
-    QuestionsService,
     QuestionsRepository,
   ],
 })
-export class QuestionsModule {}
+export class AnswersModule {}
