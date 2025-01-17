@@ -14,6 +14,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { StudentAnswerService } from './answers.service';
 import { StudentAnswersRepository } from './answers.repository';
 import { StudentAnswerController } from './answers.controller';
+import { QuestionsModule } from '../questions/questions.module';
 import { QuestionsController } from '../questions/questions.controller';
 import { QuestionsService } from '../questions/questions.service';
 import { QuestionsRepository } from '../questions/questions.repository';
@@ -21,6 +22,7 @@ import { QuestionsRepository } from '../questions/questions.repository';
 @Module({
   imports: [
     DatabaseModule,
+    QuestionsModule,
     DatabaseModule.forFeature([
       { name: StudentAnswerDocument.name, schema: StudentAnswerSchema },
       { name: QuestionDocument.name, schema: QuestionSchema },
@@ -69,4 +71,4 @@ import { QuestionsRepository } from '../questions/questions.repository';
     QuestionsRepository,
   ],
 })
-export class QuestionsModule {}
+export class AnswersModule {}
