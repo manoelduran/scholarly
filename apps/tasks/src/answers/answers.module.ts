@@ -15,8 +15,6 @@ import { StudentAnswerService } from './answers.service';
 import { StudentAnswersRepository } from './answers.repository';
 import { StudentAnswerController } from './answers.controller';
 import { QuestionsModule } from '../questions/questions.module';
-import { QuestionsController } from '../questions/questions.controller';
-import { QuestionsService } from '../questions/questions.service';
 import { QuestionsRepository } from '../questions/questions.repository';
 
 @Module({
@@ -63,11 +61,10 @@ import { QuestionsRepository } from '../questions/questions.repository';
       },
     ]),
   ],
-  controllers: [StudentAnswerController, QuestionsController],
+  controllers: [StudentAnswerController],
   providers: [
     StudentAnswerService,
     StudentAnswersRepository,
-    QuestionsService,
     QuestionsRepository,
   ],
 })

@@ -16,20 +16,18 @@ import {
   TaskDocument,
   TaskSchema,
 } from '@app/common';
-import { QuestionsModule } from './questions/questions.module';
 import { TasksRepository } from './tasks.repository';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { QuestionsController } from './questions/questions.controller';
-import { QuestionsService } from './questions/questions.service';
 import { QuestionsRepository } from './questions/questions.repository';
 import { StudentAnswersRepository } from './answers/answers.repository';
-import { StudentAnswerService } from './answers/answers.service';
-import { StudentAnswerController } from './answers/answers.controller';
+import { QuestionsModule } from './questions/questions.module';
+import { AnswersModule } from './answers/answers.module';
 
 @Module({
   imports: [
     DatabaseModule,
     QuestionsModule,
+    AnswersModule,
     DatabaseModule.forFeature([
       { name: TaskDocument.name, schema: TaskSchema },
       { name: QuestionDocument.name, schema: QuestionSchema },
@@ -80,14 +78,12 @@ import { StudentAnswerController } from './answers/answers.controller';
       },
     ]),
   ],
-  controllers: [TasksController, QuestionsController, StudentAnswerController],
+  controllers: [TasksController],
   providers: [
     TasksService,
     TasksRepository,
-    QuestionsService,
     QuestionsRepository,
     StudentAnswersRepository,
-    StudentAnswerService,
   ],
 })
 export class TasksModule {}
