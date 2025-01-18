@@ -16,7 +16,7 @@ describe('SchoolsController', () => {
 
   describe('root', () => {
     it('should return "Hello World!"', () => {
-      expect(schoolsController.getHello()).toBe('Hello World!');
+      expect(schoolsController.create()).toBe('Hello World!');
     });
   });
 });
