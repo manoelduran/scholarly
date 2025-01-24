@@ -1,13 +1,17 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { SchoolsRepository } from './schools.repository';
 import { CreateSchoolDto } from '@app/common';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class SchoolsService {
   constructor(private readonly schoolsRepository: SchoolsRepository) {}
-  async create(createSchoolDto: CreateSchoolDto) {
+  async create(createSchoolDto: CreateSchoolDto, ownerId: Types.ObjectId) {
     await this.validateCreateSchoolDto(createSchoolDto);
-    return this.schoolsRepository.create(createSchoolDto);
+    return this.schoolsRepository.create({
+      ...createSchoolDto,
+      ownerId,
+    });
   }
 
   private async validateCreateSchoolDto(createSchoolDto: CreateSchoolDto) {
