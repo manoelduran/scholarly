@@ -12,6 +12,9 @@ export class CreateClassroomDto {
   @IsString()
   teacherId: Types.ObjectId;
 
+  @IsString()
+  schoolId: Types.ObjectId;
+
   @IsString({ each: true })
   studentIds: Types.ObjectId[];
 }

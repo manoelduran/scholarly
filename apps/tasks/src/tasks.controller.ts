@@ -13,6 +13,7 @@ import {
   CurrentUser,
   JwtAuthGuard,
   Roles,
+  RolesEnum,
   UserDocument,
 } from '@app/common';
 
@@ -21,13 +22,13 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Roles('admin')
+  @Roles(RolesEnum.Teacher)
   @Get()
   async list() {
     return await this.tasksService.find();
   }
   @UseGuards(JwtAuthGuard)
-  @Roles('admin')
+  @Roles(RolesEnum.Teacher)
   @Post()
   @UsePipes(new ValidationPipe())
   async create(@Body() data: CreateTaskDto, @CurrentUser() user: UserDocument) {

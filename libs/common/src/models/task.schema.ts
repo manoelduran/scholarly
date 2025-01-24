@@ -19,7 +19,7 @@ export class TaskDocument extends AbstractDocument {
   @Prop({ required: false, type: Date })
   dueDate?: Date;
 
-  @Prop({ required: true, type: Types.ObjectId, ref: 'Teacher' })
+  @Prop({ required: true, type: Types.ObjectId, ref: 'UserDocument' })
   creatorId: Types.ObjectId;
 }
 
