@@ -14,6 +14,7 @@ import {
   CurrentUser,
   JwtAuthGuard,
   Roles,
+  RolesEnum,
   UserDocument,
 } from '@app/common';
 import { StudentAnswerService } from './answers.service';
@@ -24,7 +25,7 @@ export class StudentAnswerController {
   constructor(private readonly studentAnswerService: StudentAnswerService) {}
   @UseGuards(JwtAuthGuard)
   @Post(':taskId')
-  @Roles('student')
+  @Roles(RolesEnum.Student)
   @UsePipes(new ValidationPipe())
   async create(
     @Param('taskId') taskId: Types.ObjectId,

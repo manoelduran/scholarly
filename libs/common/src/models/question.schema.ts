@@ -30,7 +30,7 @@ export class QuestionDocument extends AbstractDocument {
   @Prop({ required: false, type: [String] })
   tags?: string[];
 
-  @Prop({ required: true, type: Types.ObjectId, ref: 'Teacher' })
+  @Prop({ required: true, type: Types.ObjectId, ref: 'UserDocument' })
   creatorId: Types.ObjectId;
 }
 

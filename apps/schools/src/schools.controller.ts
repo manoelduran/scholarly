@@ -21,6 +21,6 @@ export class SchoolsController {
     @CurrentUser() user: UserDocument,
     @Payload() createSchoolDto: CreateSchoolDto,
   ) {
-    return this.schoolsService.create(createSchoolDto);
+    return this.schoolsService.create(createSchoolDto, user._id);
   }
 }

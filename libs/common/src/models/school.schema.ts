@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from '@app/common';
+import { Types } from 'mongoose';
 
 @Schema({ versionKey: false })
 export class SchoolDocument extends AbstractDocument {
@@ -11,6 +12,9 @@ export class SchoolDocument extends AbstractDocument {
 
   @Prop({ required: true })
   city: string;
+
+  @Prop({ required: true, type: Types.ObjectId, ref: 'UserDocument' })
+  ownerId: Types.ObjectId;
 }
 
 export const SchoolSchema = SchemaFactory.createForClass(SchoolDocument);
