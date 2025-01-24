@@ -3,6 +3,7 @@ import * as Joi from 'joi';
 import { SchoolsController } from './schools.controller';
 import { SchoolsService } from './schools.service';
 import {
+  AUTH_SERVICE,
   ClassroomDocument,
   ClassroomSchema,
   DatabaseModule,
@@ -10,9 +11,10 @@ import {
   SchoolDocument,
   SchoolSchema,
 } from '@app/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SchoolsRepository } from './schools.repository';
 import { ClassroomsModule } from './classrooms/classrooms.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -31,6 +33,19 @@ import { ClassroomsModule } from './classrooms/classrooms.module';
         RABBITMQ_URI: Joi.string().required(),
       }),
     }),
+    ClientsModule.registerAsync([
+      {
+        name: AUTH_SERVICE,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
+            queue: 'auth',
+          },
+        }),
+        inject: [ConfigService],
+      },
+    ]),
   ],
   controllers: [SchoolsController],
   providers: [SchoolsService, SchoolsRepository],
